@@ -1,4 +1,4 @@
-package com.lazyworking.sagupalgu.domain;
+package com.lazyworking.sagupalgu.global.converter;
 
 import javax.persistence.AttributeConverter;
 

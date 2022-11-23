@@ -1,7 +1,7 @@
-package com.lazyworking.sagupalgu.service;
+package com.lazyworking.sagupalgu.item.service;
 
-import com.lazyworking.sagupalgu.domain.UsedItem;
-import com.lazyworking.sagupalgu.repository.UsedItemRepository;
+import com.lazyworking.sagupalgu.item.domain.UsedItem;
+import com.lazyworking.sagupalgu.item.repository.UsedItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

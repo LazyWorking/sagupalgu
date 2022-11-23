@@ -1,5 +1,6 @@
-package com.lazyworking.sagupalgu.domain;
+package com.lazyworking.sagupalgu.category.domain;
 
+import com.lazyworking.sagupalgu.item.domain.UsedItem;
 import lombok.Data;
 
 import javax.persistence.*;

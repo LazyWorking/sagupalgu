@@ -1,20 +1,13 @@
 package com.lazyworking.sagupalgu.service;
 
-import com.lazyworking.sagupalgu.domain.Category;
-import com.lazyworking.sagupalgu.domain.UsedItem;
-import com.lazyworking.sagupalgu.repository.CategoryRepository;
-import com.lazyworking.sagupalgu.repository.UsedItemRepository;
+import com.lazyworking.sagupalgu.item.domain.UsedItem;
+import com.lazyworking.sagupalgu.item.service.UsedItemService;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.annotation.After;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.NoSuchElementException;
 

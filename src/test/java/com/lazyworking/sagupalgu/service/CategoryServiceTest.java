@@ -1,7 +1,9 @@
 package com.lazyworking.sagupalgu.service;
 
-import com.lazyworking.sagupalgu.domain.Category;
-import com.lazyworking.sagupalgu.domain.UsedItem;
+import com.lazyworking.sagupalgu.category.domain.Category;
+import com.lazyworking.sagupalgu.item.domain.UsedItem;
+import com.lazyworking.sagupalgu.category.service.CategoryService;
+import com.lazyworking.sagupalgu.item.service.UsedItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

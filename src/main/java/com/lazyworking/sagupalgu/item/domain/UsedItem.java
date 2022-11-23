@@ -1,5 +1,7 @@
-package com.lazyworking.sagupalgu.domain;
+package com.lazyworking.sagupalgu.item.domain;
 
+import com.lazyworking.sagupalgu.category.domain.Category;
+import com.lazyworking.sagupalgu.global.converter.BooleanToYNConverter;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -18,7 +20,7 @@ public class UsedItem {
     private int price;
 
     @Column(nullable = false)
-    @Convert(converter=BooleanToYNConverter.class)
+    @Convert(converter= BooleanToYNConverter.class)
     private boolean ifSelled;
 
     @Column(length = 40)
