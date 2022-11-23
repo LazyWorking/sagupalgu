@@ -1,7 +1,7 @@
 package com.lazyworking.sagupalgu.security;
 
-import com.lazyworking.sagupalgu.domain.User;
-import com.lazyworking.sagupalgu.repository.UserRepository;
+import com.lazyworking.sagupalgu.domain.Users;
+import com.lazyworking.sagupalgu.repository.UsersRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -26,19 +26,24 @@ public class JwtTokenProvider {
     @Value("${jwt_key}")
     private String secretKey;
 
-    private final UserRepository userRepository;
+    private final UsersRepository userRepository;
 
     @PostConstruct
     protected void init(){
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createAccessToken(String memberId, List<String> roles){
+    public String createToken(String memberId, List<String> roles, String tokenType){
         Claims claims = Jwts.claims().setSubject(memberId);
         claims.put("roles", roles);
         Date now = new Date();
 
-        long tokenValidTime = 30 * 60 * 1000L;
+        long tokenValidTime;
+        if (tokenType.equals("AccessToken")){
+            tokenValidTime = 30 * 60 * 1000L; // 30분
+        }else{
+            tokenValidTime = 14 * 24 * 60 * 60 * 1000L; //2주
+        }
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -49,13 +54,13 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String token){
-        User user = this.findUser(token);
+        Users user = this.findUser(token);
         return new UsernamePasswordAuthenticationToken(user, "", user.getAuthorities());
     }
 
-    public User findUser(String token){
+    public Users findUser(String token){
         String email = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<Users> user = userRepository.findByOauthId(email);
         if(user.isPresent()){
             return user.get();
         }else{
@@ -63,8 +68,8 @@ public class JwtTokenProvider {
         }
     }
 
-    public String resolveToken(HttpServletRequest request){
-        return request.getHeader("AccessToken");
+    public String resolveToken(HttpServletRequest request, String tokenType){
+        return request.getHeader(tokenType);
     }
 
     public boolean validateToken(String jwtToken){

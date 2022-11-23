@@ -1,7 +1,9 @@
 package com.lazyworking.sagupalgu.service;
 
-import com.lazyworking.sagupalgu.domain.User;
-import com.lazyworking.sagupalgu.repository.UserRepository;
+import com.lazyworking.sagupalgu.domain.RefreshToken;
+import com.lazyworking.sagupalgu.domain.Users;
+import com.lazyworking.sagupalgu.repository.RefreshTokenRepository;
+import com.lazyworking.sagupalgu.repository.UsersRepository;
 import com.lazyworking.sagupalgu.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.client.ResponseHandler;
@@ -22,13 +24,16 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 
 @Transactional
 @RequiredArgsConstructor
 @Service
 public class UserService {
-    private final UserRepository userRepository;
+    private final UsersRepository usersRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String kakaoClientId;
@@ -103,35 +108,60 @@ public class UserService {
         }
     }
 
-    public String kakaoLogin(String code){
+    public HashMap<String, String> returnTokens(Users user){
+        HashMap<String, String> tokens = new HashMap<>();
+        
+        String accessToken = jwtTokenProvider.createToken(user.getEmail(), user.getRoles(), "AccessToken");
+        String refreshToken = jwtTokenProvider.createToken(user.getEmail(), user.getRoles(), "RefreshToken");
+        
+        RefreshToken userRefreshToken = RefreshToken.builder()
+                .userId(user.getId())
+                .refreshToken(refreshToken)
+                .build();
+        refreshTokenRepository.save(userRefreshToken);
+        
+        tokens.put("AccessToken", accessToken);
+        tokens.put("RefreshToken", refreshToken);
+        
+        return tokens;
+    }
+
+    public HashMap<String, String> kakaoLogin(String code){
         String authorizationUrl = kakaoTokenHostUrl
                 + "?grant_type=" + kakaoAuthorizationType
                 + "&client_id=" + kakaoClientId
                 + "&redirect_url=" + kakaoRedirectUrl
                 + "&code=" + code;
         String accessToken = getAccessToken(authorizationUrl);
-        System.out.println("accessToken = " + accessToken);
 
         JSONObject userInfo = getUserInfo(accessToken, kakaoUserInfoUrl);
-        String email = String.valueOf(userInfo.get("id"));
+        String oauthId = String.valueOf(userInfo.get("id"));
 
-        User user = userRepository.findByEmail(email).orElseGet(() ->{
-            JSONObject tmp = (JSONObject) userInfo.get("properties");
-            String nickname = String.valueOf(tmp.get("nickname"));
+        Users user = usersRepository.findByOauthId(oauthId).orElseGet(() ->{
+            JSONObject kakao_account = (JSONObject) userInfo.get("kakao_account");
+            String email = String.valueOf(kakao_account.get("email"));
+            String gender = String.valueOf(kakao_account.get("gender"));
+            if (gender.equals("male")){
+                gender = "M";
+            }else{
+                gender = "F";
+            }
 
-            return User.builder()
+            return Users.builder()
                     .email(email)
-                    .password("")
-                    .name(nickname)
+                    .joinType("K")
+                    .gender(gender)
+                    .joinDate(new Date())
+                    .oauthId(oauthId)
                     .roles(Collections.singletonList("ROLE_USER"))
                     .build();
         });
-        userRepository.save(user);
 
-        return jwtTokenProvider.createAccessToken(user.getEmail(), user.getRoles());
+        usersRepository.save(user);
+        return returnTokens(user);
     }
 
-    public String naverLogin(String code){
+    public HashMap<String, String> naverLogin(String code){
         String authorizationUrl = naverTokenHostUrl
                 + "?grant_type=" + naverAuthorizationType
                 + "&client_id=" + naverClientId
@@ -141,20 +171,24 @@ public class UserService {
         String accessToken = getAccessToken(authorizationUrl);
 
         JSONObject userInfo = (JSONObject) getUserInfo(accessToken, naverUserInfoUrl).get("response");
-        String email = String.valueOf(userInfo.get("id"));
+        String oauthId = String.valueOf(userInfo.get("id"));
 
-        User user = userRepository.findByEmail(email).orElseGet(() -> {
-            String nickname = String.valueOf(userInfo.get("name"));
+        Users user = usersRepository.findByOauthId(oauthId).orElseGet(() -> {
+//            String nickname = String.valueOf(userInfo.get("name"));
+            String email = String.valueOf(userInfo.get("email"));
+            String gender = String.valueOf(userInfo.get("gender"));
 
-            return User.builder()
+            return Users.builder()
                     .email(email)
-                    .password("")
-                    .name(nickname)
+                    .joinType("N")
+                    .gender(gender)
+                    .joinDate(new Date())
+                    .oauthId(oauthId)
                     .roles(Collections.singletonList("ROLE_USER"))
                     .build();
         });
 
-        userRepository.save(user);
-        return jwtTokenProvider.createAccessToken(user.getEmail(), user.getRoles());
+        usersRepository.save(user);
+        return returnTokens(user);
     }
 }

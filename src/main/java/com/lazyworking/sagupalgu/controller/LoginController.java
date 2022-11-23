@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.HashMap;
 
 @Controller
 @RequiredArgsConstructor
@@ -17,13 +20,15 @@ public class LoginController {
     }
 
     @GetMapping("/login/oauth2/code/kakao")
-    public String kakaoLogin(@RequestParam String code) {
+    @ResponseBody
+    public HashMap<String, String> kakaoLogin(@RequestParam String code) {
         return userService.kakaoLogin(code);
-//        https://accounts.kakao.com/login/?continue=https://kauth.kakao.com/oauth/authorize?response_type=code&redirect_uri=http://localhost:8080%/login/oauth2/code/kakao%26through_account%3Dtrue%26client_id%3D43e398315e08268714887b3750a55107    }
-    }
+//        https://kauth.kakao.com/oauth/authorize?client_id=0455db792907e6e653f93d1f9daf65a7&redirect_uri=http://localhost:8080/login/oauth2/code/kakao&response_type=code
+        }
 
     @GetMapping("/login/oauth2/code/naver")
-    public String naverLogin(@RequestParam String code){
+    @ResponseBody
+    public HashMap<String, String> naverLogin(@RequestParam String code){
         return userService.naverLogin(code);
 //        https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=I7UExJKBf_S3n8z2QDw3&redirect_uri=http://localhost:8080/login/oauth2/code/naver&state=
     }

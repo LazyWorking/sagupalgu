@@ -1,5 +1,6 @@
 package com.lazyworking.sagupalgu.domain;
 
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,25 +21,39 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class User implements UserDetails {
+public class Users implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, length = 30)
+    @NotNull
     private String email;
+
     @Column(length = 200)
     private String password;
+
     @Column(length = 10)
     private String name;
+
     @Column
     private Date joinDate;
+
     @Column(length = 1)
-    private char joinType;
+    @NotNull
+    private String joinType;
+
     @Column(length = 1)
-    private char gender;
-    @Column(length = 200)
-    private String refreshToken;
+    @NotNull
+    private String gender;
+
+    @Column(length = 100, unique = true)
+    @NotNull
+    private String oauthId;
+
+    @OneToOne
+    @JoinColumn(name="id")
+    private RefreshToken refreshToken;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
