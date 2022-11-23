@@ -23,4 +23,20 @@ public class UsedItem {
 
     @Column(length = 40)
     private String context;
+
+    @ManyToOne
+    @JoinColumn
+    private Category category;
+
+    //양방향 연결관계 설정
+    public void setCategory(Category category) {
+        if(!category.getItemList().contains(this))
+            category.getItemList().add(this);
+        this.category = category;
+    }
+
+    @Override
+    public String toString(){
+        return String.format("[id:%d\tname:%s\tprice:%d\tifSelled:%s\tContext:%s\tCategory:%s]", id, name, price, ifSelled, context, category);
+    }
 }

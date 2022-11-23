@@ -15,8 +15,9 @@ import java.util.NoSuchElementException;
 public class UsedItemService {
     private final UsedItemRepository usedItemRepository;
 
-    public void save(UsedItem item) {
-        usedItemRepository.save(item);
+    public UsedItem save(UsedItem item) {
+        UsedItem saveItem = usedItemRepository.save(item);
+        return saveItem;
     }
 
     public void deleteById(long id) {
