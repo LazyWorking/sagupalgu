@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-@Entity(name="user")
+@Entity(name="users")
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
