@@ -16,7 +16,7 @@ import java.util.List;
 public class Category {
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
     @Column(length = 20, nullable = false)
     private String name;
