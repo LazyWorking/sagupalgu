@@ -6,29 +6,36 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+/*
+ * author: JehyunJung
+ * purpose: UsedItem Entity
+ * version: 1.0
+ */
 @Entity
 @Data
 public class UsedItem {
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
     @Column(length = 20, nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private int price;
-
-    @Column(nullable = false)
-    @Convert(converter= BooleanToYNConverter.class)
-    private boolean ifSelled;
-
-    @Column(length = 40)
-    private String context;
+    private Integer price;
 
     @ManyToOne
     @JoinColumn
     private Category category;
+
+    @Column(nullable = false)
+    @Convert(converter= BooleanToYNConverter.class)
+    private Boolean ifSelled;
+
+    @Column(length = 40)
+    private String context;
+
+
 
     //양방향 연결관계 설정
     public void setCategory(Category category) {

@@ -24,6 +24,14 @@ public class UsedItemService {
         return saveItem;
     }
 
+    public List<UsedItem> findByName(String name) {
+        return usedItemRepository.findByNameContaining(name);
+    }
+
+    public List<UsedItem> findAllUsedItems() {
+        return usedItemRepository.findAll();
+    }
+
     public void deleteById(long id) {
         usedItemRepository.deleteById(id);
     }
@@ -34,11 +42,4 @@ public class UsedItemService {
                 .orElseThrow(() -> new NoSuchElementException());
     }
 
-    public List<UsedItem> findByName(String name) {
-        return usedItemRepository.findByNameContaining(name);
-    }
-
-    public List<UsedItem> findAllUsedItems() {
-        return usedItemRepository.findAll();
-    }
 }
