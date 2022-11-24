@@ -9,6 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/*
+ * author: JehyunJung
+ * purpose: service class for Category
+ * version: 1.0
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional

@@ -6,7 +6,11 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+ * author: JehyunJung
+ * purpose: Entity Class for Category
+ * version: 1.0
+ */
 @Entity
 @Data
 public class Category {
