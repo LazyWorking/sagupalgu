@@ -108,7 +108,7 @@ public class UserService {
         }
     }
 
-    public HashMap<String, String> returnTokens(Users user){
+    public HashMap<String, String> returnUserInfo(Users user){
         HashMap<String, String> tokens = new HashMap<>();
         
         String accessToken = jwtTokenProvider.createToken(user.getEmail(), user.getRoles(), "AccessToken");
@@ -120,8 +120,9 @@ public class UserService {
                 .build();
         refreshTokenRepository.save(userRefreshToken);
         
-        tokens.put("AccessToken", accessToken);
-        tokens.put("RefreshToken", refreshToken);
+        tokens.put("accessToken", accessToken);
+        tokens.put("refreshToken", refreshToken);
+        tokens.put("name", user.getName());
         
         return tokens;
     }
@@ -139,6 +140,7 @@ public class UserService {
 
         Users user = usersRepository.findByOauthId(oauthId).orElseGet(() ->{
             JSONObject kakao_account = (JSONObject) userInfo.get("kakao_account");
+            String nickname = String.valueOf(kakao_account.get("nickname"));
             String email = String.valueOf(kakao_account.get("email"));
             String gender = String.valueOf(kakao_account.get("gender"));
             if (gender.equals("male")){
@@ -148,6 +150,7 @@ public class UserService {
             }
 
             return Users.builder()
+                    .name(nickname)
                     .email(email)
                     .joinType("K")
                     .gender(gender)
@@ -158,7 +161,7 @@ public class UserService {
         });
 
         usersRepository.save(user);
-        return returnTokens(user);
+        return returnUserInfo(user);
     }
 
     public HashMap<String, String> naverLogin(String code){
@@ -189,6 +192,6 @@ public class UserService {
         });
 
         usersRepository.save(user);
-        return returnTokens(user);
+        return returnUserInfo(user);
     }
 }
