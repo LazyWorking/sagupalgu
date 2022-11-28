@@ -59,13 +59,12 @@ public class JwtTokenProvider {
     }
 
     public Users findUser(String token){
-        String email = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
-        Optional<Users> user = userRepository.findByOauthId(email);
-        if(user.isPresent()){
-            return user.get();
-        }else{
-            throw new UsernameNotFoundException("User not found.");
-        }
+        String oauthId = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+        System.out.println("oauthId = " + oauthId);
+
+        return userRepository.findByOauthId(oauthId).orElseThrow(() ->{
+            throw new UsernameNotFoundException("User not Found");
+        });
     }
 
     public String resolveToken(HttpServletRequest request, String tokenType){

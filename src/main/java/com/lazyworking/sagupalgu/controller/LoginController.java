@@ -32,4 +32,10 @@ public class LoginController {
         return userService.naverLogin(code);
 //        https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=I7UExJKBf_S3n8z2QDw3&redirect_uri=http://localhost:8080/login/oauth2/code/naver&state=
     }
+
+    @GetMapping("/test")
+    @ResponseBody
+    public String test(){
+        return "hello";
+    }
 }

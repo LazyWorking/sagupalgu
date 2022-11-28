@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .and()
                 .csrf().disable()
                 .authorizeRequests() // 요청에 대한 사용권한 체크
+                .antMatchers("/test/**").hasRole("USER")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
                 .and()

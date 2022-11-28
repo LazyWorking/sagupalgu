@@ -1,5 +1,6 @@
 package com.lazyworking.sagupalgu.security;
 
+import com.lazyworking.sagupalgu.exception.AccessTokenExpiredException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -24,13 +25,11 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain){
         String accessToken = jwtTokenProvider.resolveToken((HttpServletRequest) request, "AccessToken");
 
-        try{
-            if(accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
-                Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        if(accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
+            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }else if(accessToken != null && !jwtTokenProvider.validateToken(accessToken)){
+            throw new AccessTokenExpiredException();
         }
 
         try {

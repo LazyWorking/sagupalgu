@@ -109,22 +109,23 @@ public class UserService {
     }
 
     public HashMap<String, String> returnUserInfo(Users user){
-        HashMap<String, String> tokens = new HashMap<>();
+        HashMap<String, String> userInfo = new HashMap<>();
         
-        String accessToken = jwtTokenProvider.createToken(user.getEmail(), user.getRoles(), "AccessToken");
-        String refreshToken = jwtTokenProvider.createToken(user.getEmail(), user.getRoles(), "RefreshToken");
+        String accessToken = jwtTokenProvider.createToken(user.getOauthId(), user.getRoles(), "AccessToken");
+        String refreshToken = jwtTokenProvider.createToken(user.getOauthId(), user.getRoles(), "RefreshToken");
         
         RefreshToken userRefreshToken = RefreshToken.builder()
                 .userId(user.getId())
                 .refreshToken(refreshToken)
                 .build();
         refreshTokenRepository.save(userRefreshToken);
+
+        userInfo.put("email", user.getEmail());
+        userInfo.put("oauthId", user.getOauthId());
+        userInfo.put("accessToken", accessToken);
+        userInfo.put("refreshToken", refreshToken);
         
-        tokens.put("accessToken", accessToken);
-        tokens.put("refreshToken", refreshToken);
-        tokens.put("name", user.getName());
-        
-        return tokens;
+        return userInfo;
     }
 
     public HashMap<String, String> kakaoLogin(String code){
@@ -149,7 +150,7 @@ public class UserService {
                 gender = "F";
             }
 
-            return Users.builder()
+            Users newUser = Users.builder()
                     .name(nickname)
                     .email(email)
                     .joinType("K")
@@ -158,9 +159,9 @@ public class UserService {
                     .oauthId(oauthId)
                     .roles(Collections.singletonList("ROLE_USER"))
                     .build();
+            return usersRepository.save(newUser);
         });
 
-        usersRepository.save(user);
         return returnUserInfo(user);
     }
 
@@ -177,11 +178,12 @@ public class UserService {
         String oauthId = String.valueOf(userInfo.get("id"));
 
         Users user = usersRepository.findByOauthId(oauthId).orElseGet(() -> {
-//            String nickname = String.valueOf(userInfo.get("name"));
+            String nickname = String.valueOf(userInfo.get("name"));
             String email = String.valueOf(userInfo.get("email"));
             String gender = String.valueOf(userInfo.get("gender"));
 
-            return Users.builder()
+            Users newUser = Users.builder()
+                    .name(nickname)
                     .email(email)
                     .joinType("N")
                     .gender(gender)
@@ -189,9 +191,9 @@ public class UserService {
                     .oauthId(oauthId)
                     .roles(Collections.singletonList("ROLE_USER"))
                     .build();
+            return usersRepository.save(newUser);
         });
 
-        usersRepository.save(user);
         return returnUserInfo(user);
     }
 }
