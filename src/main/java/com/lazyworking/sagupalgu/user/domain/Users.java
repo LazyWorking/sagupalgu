@@ -1,6 +1,6 @@
 package com.lazyworking.sagupalgu.user.domain;
 
-import com.lazyworking.sagupalgu.refreshToken.repository.RefreshToken;
+import com.lazyworking.sagupalgu.refreshToken.domain.RefreshToken;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +27,7 @@ public class Users implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, length = 30)
+    @Column(length = 30)
     @NotNull
     private String email;
 

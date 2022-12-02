@@ -1,8 +1,8 @@
 package com.lazyworking.sagupalgu.user.service;
 
-import com.lazyworking.sagupalgu.refreshToken.repository.RefreshToken;
+import com.lazyworking.sagupalgu.refreshToken.domain.RefreshToken;
 import com.lazyworking.sagupalgu.user.domain.Users;
-import com.lazyworking.sagupalgu.refreshToken.domain.RefreshTokenRepository;
+import com.lazyworking.sagupalgu.refreshToken.repository.RefreshTokenRepository;
 import com.lazyworking.sagupalgu.user.repository.UsersRepository;
 import com.lazyworking.sagupalgu.global.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;

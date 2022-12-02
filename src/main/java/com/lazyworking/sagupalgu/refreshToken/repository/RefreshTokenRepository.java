@@ -1,6 +1,6 @@
-package com.lazyworking.sagupalgu.refreshToken.domain;
+package com.lazyworking.sagupalgu.refreshToken.repository;
 
-import com.lazyworking.sagupalgu.refreshToken.repository.RefreshToken;
+import com.lazyworking.sagupalgu.refreshToken.domain.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

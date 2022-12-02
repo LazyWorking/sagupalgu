@@ -1,4 +1,4 @@
-package com.lazyworking.sagupalgu.refreshToken.repository;
+package com.lazyworking.sagupalgu.refreshToken.domain;
 
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ public class RefreshToken {
     @Id
     private long userId;
 
-    @Column(length = 200)
+    @Column(length = 300)
     @NotNull
     private String refreshToken;
 }
