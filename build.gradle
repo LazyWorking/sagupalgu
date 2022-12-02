@@ -31,7 +31,7 @@ dependencies {
 	//Spring Security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	testImplementation 'org.springframework.security:spring-security-test'
-
+  
 	//Thymeleaf
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
@@ -42,10 +42,18 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
 
+	//httpclient(Get jsonApi from another server)
+	implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+
 	//bean validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 
+	//json-simple
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+	//jwt
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
 }
 
