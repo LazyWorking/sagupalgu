@@ -1,4 +1,4 @@
-package com.lazyworking.sagupalgu.domain;
+package com.lazyworking.sagupalgu.refreshToken.repository;
 
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;

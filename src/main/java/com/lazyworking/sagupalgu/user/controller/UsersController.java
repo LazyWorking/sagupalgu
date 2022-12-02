@@ -1,6 +1,6 @@
-package com.lazyworking.sagupalgu.controller;
+package com.lazyworking.sagupalgu.user.controller;
 
-import com.lazyworking.sagupalgu.service.UserService;
+import com.lazyworking.sagupalgu.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 @Controller
 @RequiredArgsConstructor
-public class LoginController {
+public class UsersController {
     private final UserService userService;
 
     @GetMapping("/signIn")

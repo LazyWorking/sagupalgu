@@ -1,5 +1,6 @@
-package com.lazyworking.sagupalgu.domain;
+package com.lazyworking.sagupalgu.user.domain;
 
+import com.lazyworking.sagupalgu.refreshToken.repository.RefreshToken;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

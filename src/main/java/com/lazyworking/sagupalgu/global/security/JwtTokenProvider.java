@@ -1,7 +1,7 @@
-package com.lazyworking.sagupalgu.security;
+package com.lazyworking.sagupalgu.global.security;
 
-import com.lazyworking.sagupalgu.domain.Users;
-import com.lazyworking.sagupalgu.repository.UsersRepository;
+import com.lazyworking.sagupalgu.user.domain.Users;
+import com.lazyworking.sagupalgu.user.repository.UsersRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
@@ -60,7 +59,6 @@ public class JwtTokenProvider {
 
     public Users findUser(String token){
         String oauthId = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
-        System.out.println("oauthId = " + oauthId);
 
         return userRepository.findByOauthId(oauthId).orElseThrow(() ->{
             throw new UsernameNotFoundException("User not Found");

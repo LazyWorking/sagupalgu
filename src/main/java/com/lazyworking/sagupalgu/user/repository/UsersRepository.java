@@ -1,6 +1,6 @@
-package com.lazyworking.sagupalgu.repository;
+package com.lazyworking.sagupalgu.user.repository;
 
-import com.lazyworking.sagupalgu.domain.Users;
+import com.lazyworking.sagupalgu.user.domain.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

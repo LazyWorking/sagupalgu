@@ -1,10 +1,10 @@
-package com.lazyworking.sagupalgu.service;
+package com.lazyworking.sagupalgu.user.service;
 
-import com.lazyworking.sagupalgu.domain.RefreshToken;
-import com.lazyworking.sagupalgu.domain.Users;
-import com.lazyworking.sagupalgu.repository.RefreshTokenRepository;
-import com.lazyworking.sagupalgu.repository.UsersRepository;
-import com.lazyworking.sagupalgu.security.JwtTokenProvider;
+import com.lazyworking.sagupalgu.refreshToken.repository.RefreshToken;
+import com.lazyworking.sagupalgu.user.domain.Users;
+import com.lazyworking.sagupalgu.refreshToken.domain.RefreshTokenRepository;
+import com.lazyworking.sagupalgu.user.repository.UsersRepository;
+import com.lazyworking.sagupalgu.global.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -120,7 +120,6 @@ public class UserService {
                 .build();
         refreshTokenRepository.save(userRefreshToken);
 
-        userInfo.put("email", user.getEmail());
         userInfo.put("oauthId", user.getOauthId());
         userInfo.put("accessToken", accessToken);
         userInfo.put("refreshToken", refreshToken);

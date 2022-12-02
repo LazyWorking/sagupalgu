@@ -1,7 +1,7 @@
-package com.lazyworking.sagupalgu.config;
+package com.lazyworking.sagupalgu.global.config;
 
-import com.lazyworking.sagupalgu.security.JwtAuthenticationFilter;
-import com.lazyworking.sagupalgu.security.JwtTokenProvider;
+import com.lazyworking.sagupalgu.global.security.JwtAuthenticationFilter;
+import com.lazyworking.sagupalgu.global.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
