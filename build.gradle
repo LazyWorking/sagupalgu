@@ -42,14 +42,7 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
 
-	//httpclient(Get jsonApi from another server)
-	implementation 'org.apache.httpcomponents:httpclient:4.5.13'
 
-	//json-simple
-	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
-
-	//jwt
-	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
 }
 
