@@ -42,6 +42,9 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
 
+	//bean validation
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
 
 
 }
