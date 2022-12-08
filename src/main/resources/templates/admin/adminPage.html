@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 560px;
+        }
+        .field-error{
+            border-color: #DC3545;
+            color: #DC3454;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="py-5 text-center">
+        <h2 th:text="#{page.adminPage}">관리자 페이지</h2>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary float-end"
+                    onclick="location.href='users.html'"
+                    th:onclick="|location.href='@{/admin/users}'|"
+                    type="button" th:text="#{page.users}">유저 목록</button>
+        </div>
+        <div class="col">
+            <button class="btn btn-primary float-end"
+                    onclick="location.href='reportedUsers.html'"
+                    th:onclick="|location.href='@{/admin/reportedUsers}'|"
+                    type="button" th:text="#{page.reportedUsers}">신고 유저 목록</button>
+        </div>
+        <div class="col">
+            <button class="btn btn-primary float-end"
+                    onclick="location.href='blockedUsers.html'"
+                    th:onclick="|location.href='@{/admin/blockedUsers}'|"
+                    type="button" th:text="#{page.blockedUsers}">차단 유저 목록</button>
+        </div>
+    </div>
+</div> <!-- /container -->
+</body>
+</html>
