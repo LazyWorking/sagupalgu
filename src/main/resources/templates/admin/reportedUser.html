@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container" style="max-width: 600px">
+    <div class="py-5 text-center">
+        <h2 th:text="#{page.reportedUser}">신고 목록</h2>
+    </div>
+    <hr class="my-4">
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th th:text="#{label.user.id}">유저ID</th>
+                <th th:text="#{label.user.reporter}">신고자</th>
+                <th th:text="#{label.user.reportDate}">신고 날짜</th>
+                <th th:text="#{label.user.reportContext}">신고 내용</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="reportedUserData : ${reportedUserDatas}">
+                <td><a href="reportedUser.html" th:href="@{|admin/userInfo/${reportedUserData.user.id}|}" th:text="${reportedUserData.user.id}">유저 ID</a></td>
+                <td><a href="reportedUser.html" th:href="@{|admin/userInfo/${reportedUserData.reporter.id}|}" th:text="${reportedUserData.reporter.id}">신고자</a></td>
+                <td th:text="${reportedUserData.date}">신고 날짜</td>
+                <td th:text="${reportedUserData.context}">신고 내용</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <form action="reportedUser.html" th:action="@{|/admin/blockUser/${userId}|}" method="post">
+        <hr class="my-4">
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-danger btn-lg" type="submit" th:text="#{button.block}">차단하기</button>
+            </div>
+        </div>
+
+    </form>
+
+</div> <!-- /container -->
+
+</body>
+</html>
