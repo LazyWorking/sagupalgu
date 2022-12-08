@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container" style="max-width: 600px">
+    <div class="py-5 text-center">
+        <h2 th:text="#{page.blockedUsers}">차단 목록</h2>
+    </div>
+    <hr class="my-4">
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th th:text="#{label.user.id}">유저ID</th>
+                <th th:text="#{label.user.blockedDate}">차단 일자</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="blockUser : ${blockedUsers}">
+                <td><a href="userInfo.html" th:href="@{|/admin/userInfo/${blockUser.id}|}" th:text="${blockUser.id}">유저 ID</a></td>
+                <td th:text="${blockUser.date} ">날짜</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div> <!-- /container -->
+
+</body>
+</html>
