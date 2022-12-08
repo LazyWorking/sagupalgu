@@ -2,10 +2,7 @@ package com.lazyworking.sagupalgu.user.domain;
 
 import com.lazyworking.sagupalgu.refreshToken.domain.RefreshToken;
 import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@Setter
 @Entity(name="users")
 @NoArgsConstructor
 @Builder
@@ -58,6 +56,12 @@ public class Users implements UserDetails {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<ReportedUsers> reportedUsersList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "reporter")
+    private List<ReportedUsers> reports = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
