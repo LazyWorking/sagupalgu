@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <link th:href="@{/css/bootstrap.min.css}"
+        href="../css/bootstrap.min.css" rel="stylesheet">
+  <style>
+        .container {
+            max-width: 560px;
+        }
+        .field-error{
+            border-color: #DC3545;
+            color: #DC3454;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="py-5 text-center">
+    <h2 th:text="#{page.homePage}">중고 거래 시장에 오신 것을 환영합니다.</h2>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <button class="btn btn-primary float-end"
+              onclick="location.href='signin.html'"
+              th:onclick="|location.href='@{/signIn}'|"
+              type="button" th:text="#{page.signIn}">회원 가입</button>
+    </div>
+
+    <div class="col">
+      <button class="btn btn-primary float-end"
+              onclick="location.href='usedItems'"
+              th:onclick="|location.href='@{/usedItems}'|"
+              type="button" th:text="#{page.usedItems}">상품 목록</button>
+    </div>
+
+    <div class="col">
+      <button class="btn btn-primary float-end"
+              onclick="location.href='blockedUsers.html'"
+              th:onclick="|location.href='@{/admin}'|"
+              type="button" th:text="#{page.adminPage}">관리자 페이지</button>
+    </div>
+  </div>
+</div> <!-- /container -->
+</body>
+</html>
+
+</body>
+</html>
