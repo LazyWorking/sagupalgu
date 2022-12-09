@@ -2,10 +2,7 @@ package com.lazyworking.sagupalgu.user.domain;
 
 import com.lazyworking.sagupalgu.refreshToken.repository.RefreshToken;
 import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +18,7 @@ import java.util.stream.Collectors;
 @Entity(name="users")
 @NoArgsConstructor
 @Builder
+@Setter
 @AllArgsConstructor
 public class Users implements UserDetails {
     @Id

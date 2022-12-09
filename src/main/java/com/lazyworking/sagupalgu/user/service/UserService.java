@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
@@ -108,11 +110,9 @@ public class UserService {
         }
     }
 
-    public HashMap<String, String> returnUserInfo(Users user){
-        HashMap<String, String> userInfo = new HashMap<>();
-        
-        String accessToken = jwtTokenProvider.createToken(user.getOauthId(), user.getRoles(), "AccessToken");
-        String refreshToken = jwtTokenProvider.createToken(user.getOauthId(), user.getRoles(), "RefreshToken");
+    public void returnUserInfo(HttpServletResponse response, Users user){
+        String accessToken = jwtTokenProvider.createAccessToken(user.getOauthId(), user.getRoles());
+        String refreshToken = jwtTokenProvider.createRefreshToken(user.getOauthId(), user.getRoles());
         
         RefreshToken userRefreshToken = RefreshToken.builder()
                 .userId(user.getId())
@@ -120,14 +120,14 @@ public class UserService {
                 .build();
         refreshTokenRepository.save(userRefreshToken);
 
-        userInfo.put("oauthId", user.getOauthId());
-        userInfo.put("accessToken", accessToken);
-        userInfo.put("refreshToken", refreshToken);
-        
-        return userInfo;
+        jwtTokenProvider.setHeaderAccessToken(response, accessToken);
+        jwtTokenProvider.setHeaderRefreshToken(response, refreshToken);
     }
 
-    public HashMap<String, String> kakaoLogin(String code){
+    public HashMap<String, Boolean> kakaoLogin(HttpServletResponse response, String code){
+        HashMap<String, Boolean> hashMap = new HashMap<>();
+        hashMap.put("newUser", false);
+
         String authorizationUrl = kakaoTokenHostUrl
                 + "?grant_type=" + kakaoAuthorizationType
                 + "&client_id=" + kakaoClientId
@@ -139,6 +139,8 @@ public class UserService {
         String oauthId = String.valueOf(userInfo.get("id"));
 
         Users user = usersRepository.findByOauthId(oauthId).orElseGet(() ->{
+            hashMap.put("newUser", true);
+
             JSONObject kakao_account = (JSONObject) userInfo.get("kakao_account");
             String nickname = String.valueOf(kakao_account.get("nickname"));
             String email = String.valueOf(kakao_account.get("email"));
@@ -150,7 +152,6 @@ public class UserService {
             }
 
             Users newUser = Users.builder()
-                    .name(nickname)
                     .email(email)
                     .joinType("K")
                     .gender(gender)
@@ -161,10 +162,14 @@ public class UserService {
             return usersRepository.save(newUser);
         });
 
-        return returnUserInfo(user);
+        returnUserInfo(response, user);
+        return hashMap;
     }
 
-    public HashMap<String, String> naverLogin(String code){
+    public HashMap<String, Boolean> naverLogin(HttpServletResponse response, String code){
+        HashMap<String, Boolean> hashMap = new HashMap<>();
+        hashMap.put("newUser", false);
+
         String authorizationUrl = naverTokenHostUrl
                 + "?grant_type=" + naverAuthorizationType
                 + "&client_id=" + naverClientId
@@ -177,12 +182,13 @@ public class UserService {
         String oauthId = String.valueOf(userInfo.get("id"));
 
         Users user = usersRepository.findByOauthId(oauthId).orElseGet(() -> {
+            hashMap.put("newUser", true);
+
             String nickname = String.valueOf(userInfo.get("name"));
             String email = String.valueOf(userInfo.get("email"));
             String gender = String.valueOf(userInfo.get("gender"));
 
             Users newUser = Users.builder()
-                    .name(nickname)
                     .email(email)
                     .joinType("N")
                     .gender(gender)
@@ -193,6 +199,17 @@ public class UserService {
             return usersRepository.save(newUser);
         });
 
-        return returnUserInfo(user);
+        returnUserInfo(response, user);
+        return hashMap;
+    }
+
+    public void setNickName(HttpServletRequest request, String nickName){
+        String accessToken = jwtTokenProvider.resolveAccessToken(request);
+        String oauthId = jwtTokenProvider.getOauthId(accessToken);
+
+        Users user = usersRepository.findByOauthId(oauthId).orElseThrow(() -> {
+            throw new RuntimeException("회원가입 안됐으니까 다시 고치셈 ㅋㅋ");
+        });
+        user.setName(nickName);
     }
 }
