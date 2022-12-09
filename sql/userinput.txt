@@ -1,0 +1,5 @@
+insert into users(JOIN_TYPE,GENDER,OAUTH_ID) values('k','m',1);
+insert into users(JOIN_TYPE,GENDER,OAUTH_ID) values('k','m',2);
+insert into users(JOIN_TYPE,GENDER,OAUTH_ID) values('k','m',3);
+insert into users(JOIN_TYPE,GENDER,OAUTH_ID) values('k','m',4);
+insert into users(JOIN_TYPE,GENDER,OAUTH_ID) values('k','m',5);

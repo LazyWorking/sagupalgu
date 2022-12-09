@@ -1,13 +1,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-    </head>
-    <body>
+<head th:replace="fragments/header::header"></head>
+<body>
+<div th:replace="fragments/navbar::navbar"></div>
         <a href="https://kauth.kakao.com/oauth/authorize?client_id=0455db792907e6e653f93d1f9daf65a7&redirect_uri=http://localhost:8080/login/oauth2/code/kakao&response_type=code
 ">
             카카오</a>
         <a href="https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=I7UExJKBf_S3n8z2QDw3&redirect_uri=http://localhost:8080/login/oauth2/code/naver&state=">
             네이버</a>
-    </body>
-    </html>
+</body>
+</html>
