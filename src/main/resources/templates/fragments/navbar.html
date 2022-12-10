@@ -6,13 +6,18 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
+            <!-- 왼쪽 정렬 -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/usedItems" th:text="#{page.usedItems}">UsedItems</a>
+                </li>
+            </ul>
+
+            <!-- 오른쪽 정렬 -->
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="/signIn" th:text="#{page.signIn}">sign in</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/usedItems" th:text="#{page.usedItems}">UsedItems</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="#{page.adminPage}">
@@ -23,6 +28,11 @@
                         <a class="dropdown-item" th:href="@{/admin/reportedUsers}" th:text="#{page.reportedUsers}">reported users</a>
                         <a class="dropdown-item" th:href="@{/admin/blockedUsers}" th:text="#{page.blockedUsers}">blocked users</a>
                     </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/report" th:href="@{/user/report}">
+                        <img src="/svg/siren_lamp.svg" width="20px" th:text="#{page.report}">
+                    </a>
                 </li>
             </ul>
         </div>
