@@ -5,6 +5,7 @@ import com.lazyworking.sagupalgu.global.converter.BooleanToYNConverter;
 import com.lazyworking.sagupalgu.item.domain.UsedItem;
 import com.lazyworking.sagupalgu.user.converter.GenderConverter;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue
@@ -36,20 +38,23 @@ public class User {
     @OneToMany
     private List<UsedItem> usedItems;
 
-    public static User createUser(String name, String email, String password, LocalDateTime joinDate, Gender gender) {
-        User user = new User();
-        user.name = name;
-        user.email = email;
-        user.password = password;
-        user.joinDate = joinDate;
-        user.gender = gender;
-        return user;
+    public User (String name, String email, String password, LocalDateTime joinDate, Gender gender) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.joinDate = joinDate;
+        this.gender = gender;
     }
 
     //각종 변경 로직
     public void change(String name) {
         this.name = name;
     }
+
+    public void changePassword(String password) {
+        this.password = password;
+    }
+
 
     @Override
     public String toString() {
