@@ -2,7 +2,7 @@ package com.lazyworking.sagupalgu.user.domain;
 
 public enum Gender {
     M("M","남성"),
-    W("W","여성"),
+    F("F","여성"),
     E("E","기타");
 
     private String code;

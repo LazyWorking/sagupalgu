@@ -3,12 +3,15 @@ package com.lazyworking.sagupalgu.user.form;
 import com.lazyworking.sagupalgu.user.domain.Gender;
 import com.lazyworking.sagupalgu.user.domain.User;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 public class UserSaveForm {
     @NotBlank
     private String name;
@@ -17,6 +20,7 @@ public class UserSaveForm {
     private String email;
 
     @NotBlank
+    @Length(min=10,max=20)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -29,13 +33,8 @@ public class UserSaveForm {
         this.gender = gender;
     }
 
-    public UserSaveForm(User user) {
-        this.name = user.getName();
-        this.email = user.getEmail();
-        this.password = user.getPassword();
-        this.gender = user.getGender();
-
+    public User toEntity() {
+        return new User(this.name, this.email, this.password, LocalDateTime.now(),this.gender);
     }
-
 
 }
