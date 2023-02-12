@@ -3,7 +3,9 @@ package com.lazyworking.sagupalgu.user.domain;
 import com.lazyworking.sagupalgu.category.domain.Category;
 import com.lazyworking.sagupalgu.global.converter.BooleanToYNConverter;
 import com.lazyworking.sagupalgu.item.domain.UsedItem;
+import com.lazyworking.sagupalgu.user.converter.GenderConverter;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -25,6 +27,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime joinDate;
 
     @Enumerated(EnumType.STRING)
@@ -47,4 +50,11 @@ public class User {
     public void change(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return String.format("[id:%d\tname:%s\temail:%s\tpassword:%s\tjoinDate:%tF\tgender:%s]", id, name, email, password, joinDate, gender.getValue());
+    }
+
+    //Dto 변환
 }
