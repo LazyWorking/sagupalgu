@@ -4,6 +4,7 @@ import com.lazyworking.sagupalgu.category.domain.Category;
 import com.lazyworking.sagupalgu.item.domain.UsedItem;
 import com.lazyworking.sagupalgu.item.form.UsedItemEditForm;
 import com.lazyworking.sagupalgu.item.form.UsedItemSaveForm;
+import com.lazyworking.sagupalgu.user.domain.Gender;
 import com.lazyworking.sagupalgu.user.domain.User;
 import com.lazyworking.sagupalgu.user.form.UserEditForm;
 import com.lazyworking.sagupalgu.user.form.UserSaveForm;
@@ -25,6 +26,17 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
+
+    //성별에 대한 목록 생성
+    @ModelAttribute("genders")
+    public Gender[] genders() {
+        Gender[] genders = Gender.values();
+        for (Gender gender : genders) {
+            log.info("gender: {}, code: {},value: {}", gender, gender.getCode(), gender.getValue());
+        }
+
+        return Gender.values();
+    }
 
     //유저 목록을 반환하는 메소드
     @GetMapping
@@ -65,7 +77,7 @@ public class UserController {
         log.info("savedID: {}", savedUserId);
         redirectAttributes.addAttribute("userId", savedUserId);
 
-        return "redirect:/user/{userId}";
+        return "redirect:/users/{userId}";
     }
 
     //기존 유저에 대한 수정을 담당하는 로직
@@ -91,7 +103,7 @@ public class UserController {
         Long savedUserId = userService.editUserInfo(form);
         redirectAttributes.addAttribute("usedItemId", savedUserId);
 
-        return "redirect:/user/{savedUserId}";
+        return "redirect:/users/{savedUserId}";
     }
 
     //유저를 삭제하기 위한 로직
