@@ -44,11 +44,21 @@
         </div>
 
         <div>
+            <label for="password" th:text="#{label.user.password}">비밀번호</label>
+            <span>
+                <input type="password" id="password" th:field="*{password}" th:errorclass="field-error" class="form-control" readonly>
+                <button class="w-100 btn btn-secondary btn-lg"
+                    onclick="location.href='changePasswordForm.html'" th:onclick="|location.href='@{/users/{userId}/changePassword(userId=${user.id})}'|" type="button" th:target="_blank" th:text="#{button.changePassword}">비밀번호 변경</button>
+            </span>
+
+        </div>
+
+        <div>
             <label for="gender" th:text="#{label.user.gender}">성별</label>
             <select id="gender" th:field="*{gender}" class="form-select" disabled>
                 <option value="">==성별 선택==</option>
-                <option th:each="gender : ${genders}" th:value="${gender}"
-                        th:text="${gender}">FAST</option>
+                <option th:each="gender : ${genders}" th:value="${gender.getCode()}"
+                        th:text="${gender.getValue()}">성별</option>
             </select>
         </div>
 
