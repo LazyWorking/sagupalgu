@@ -32,8 +32,13 @@
     </div>
 
     <div>
+        <label for="gender" th:text="#{label.user.gender}">성별</label>
+        <input type="text" id="gender" name="gender" class="form-control" value="남성" th:value="${user.gender.getValue()}" readonly>
+    </div>
+
+    <div>
         <label for="joinDate" th:text="#{label.user.joinDate}">회원가입 일자</label>
-        <input type="text" id="joinDate" name="joinDate" class="form-control" value="23.02.12" th:value="${user.joinDate}" readonly>
+        <input type="text" id="joinDate" name="joinDate" class="form-control" value="23.02.12" th:value="${{user.joinDate}}" readonly>
     </div>
 
     <hr class="my-4">

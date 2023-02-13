@@ -54,8 +54,8 @@
             <label for="gender" th:text="#{label.user.gender}">성별</label>
             <select id="gender" th:field="*{gender}" class="form-select">
                 <option value="">==성별 선택==</option>
-                <option th:each="gender : ${genders}" th:value="${gender}"
-                        th:text="${gender}">FAST</option>
+                <option th:each="gender : ${genders}" th:value="${gender.getCode()}"
+                        th:text="${gender.getValue()}">성별</option>
             </select>
         </div>
 
