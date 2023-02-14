@@ -24,4 +24,9 @@ public class UserPasswordForm {
     public UserPasswordForm(Long id) {
         this.id = id;
     }
+
+    public UserPasswordForm(Long id, String password) {
+        this.id = id;
+        this.password = password;
+    }
 }

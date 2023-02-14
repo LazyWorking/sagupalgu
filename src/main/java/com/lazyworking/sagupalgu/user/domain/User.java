@@ -47,8 +47,9 @@ public class User {
     }
 
     //각종 변경 로직
-    public void change(String name) {
+    public void change(String name,Gender gender) {
         this.name = name;
+        this.gender = gender;
     }
 
     public void changePassword(String password) {

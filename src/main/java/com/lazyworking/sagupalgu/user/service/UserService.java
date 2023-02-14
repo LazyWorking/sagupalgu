@@ -9,9 +9,11 @@ import com.lazyworking.sagupalgu.user.form.UserPasswordForm;
 import com.lazyworking.sagupalgu.user.form.UserSaveForm;
 import com.lazyworking.sagupalgu.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -21,6 +23,15 @@ import java.util.NoSuchElementException;
 @Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
+
+    @PostConstruct
+    void initData() {
+        User user1= new User("user1","user@email.com","12345678910", LocalDateTime.now(),Gender.M);
+        User user2= new User("user2","user2@email.com","12345678911", LocalDateTime.now(),Gender.F);
+
+        userRepository.save(user1);
+        userRepository.save(user2);
+    }
 
     //회원 등록 처리
     @Transactional
@@ -40,7 +51,7 @@ public class UserService {
     @Transactional
     public Long editUserInfo(UserEditForm form){
         User user = userRepository.findById(form.getId()).orElseThrow(()-> new NoSuchElementException());
-        user.change(form.getName());
+        user.change(form.getName(),form.getGender());
         return user.getId();
     }
     //회원 비밀번호 변경
@@ -71,8 +82,9 @@ public class UserService {
         if(users.isEmpty())
             return false;
         User user = users.get(0);
+
         //비밀번호가 틀린 경우
-        if(user.getPassword() != form.getPassword())
+        if(!user.getPassword().equals(form.getPassword()))
             return false;
 
         return true;

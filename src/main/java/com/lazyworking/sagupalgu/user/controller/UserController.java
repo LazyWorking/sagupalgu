@@ -4,6 +4,7 @@ import com.lazyworking.sagupalgu.item.form.UsedItemEditForm;
 import com.lazyworking.sagupalgu.user.domain.Gender;
 import com.lazyworking.sagupalgu.user.domain.User;
 import com.lazyworking.sagupalgu.user.form.UserEditForm;
+import com.lazyworking.sagupalgu.user.form.UserLoginForm;
 import com.lazyworking.sagupalgu.user.form.UserPasswordForm;
 import com.lazyworking.sagupalgu.user.form.UserSaveForm;
 import com.lazyworking.sagupalgu.user.service.UserService;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -52,7 +54,7 @@ public class UserController {
         User user = userService.findUser(userId);
         log.info("user: {}", user);
         model.addAttribute("user", user);
-        log.info("gender:{},gender:{}, class:{}",user.getGender().getCode(),user.getGender().getValue(),user.getGender().getClass());
+        log.info("gender:{},gender:{}, class:{}", user.getGender().getCode(), user.getGender().getValue(), user.getGender().getClass());
         return "user/user";
     }
 
@@ -142,10 +144,35 @@ public class UserController {
         log.info("deletedUser:{}", user);
         return "user/deleteUserForm";
     }
+
     //회원 삭제 로직
     @PostMapping("/{userId}/delete")
-    public String deleteUsedItem(@PathVariable Long userId, @ModelAttribute("user") UsedItemEditForm form,BindingResult bindingResult) {
+    public String deleteUsedItem(@PathVariable Long userId, @ModelAttribute("user") UsedItemEditForm form, BindingResult bindingResult) {
         userService.deleteUser(form.getId());
         return "redirect:/users";
+    }
+
+    //회원 로그인창 반환
+    @GetMapping("/login")
+    public String loginForm(Model model) {
+        model.addAttribute("user", new UserLoginForm());
+        return "user/loginForm";
+    }
+
+    //회원 로그인 처리 로직
+    @PostMapping("/login")
+    public String loginForm(@Validated @ModelAttribute("user") UserLoginForm form,BindingResult bindingResult,RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            log.info("errors: {}", bindingResult);
+            return "user/loginForm";
+        }
+
+        //로그인 에러
+        if (!userService.login(form)) {
+            log.info("form: {}, login failure", form);
+            bindingResult.reject("login_error");
+            return "user/loginForm";
+        }
+        return "redirect:/";
     }
 }
