@@ -4,6 +4,8 @@ spring:
     username: test_user
     password: test_user
     driver-class-name: com.mysql.cj.jdbc.Driver
+  messages:
+    basename: messages,errors
 
   jpa:
     open-in-view: false
