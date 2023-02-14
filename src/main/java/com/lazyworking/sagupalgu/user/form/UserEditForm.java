@@ -16,17 +16,13 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 public class UserEditForm {
-    @NotNull
     private Long id;
+
+    private String email;
 
     @NotBlank
     private String name;
 
-    @NotBlank
-    private String email;
-
-    @NotBlank
-    @Length(min=10,max=20)
     private String password;
 
     @Enumerated(EnumType.STRING)

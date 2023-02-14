@@ -1,22 +1,22 @@
 package com.lazyworking.sagupalgu.user.controller;
 
-import com.lazyworking.sagupalgu.category.domain.Category;
-import com.lazyworking.sagupalgu.item.domain.UsedItem;
 import com.lazyworking.sagupalgu.item.form.UsedItemEditForm;
-import com.lazyworking.sagupalgu.item.form.UsedItemSaveForm;
 import com.lazyworking.sagupalgu.user.domain.Gender;
 import com.lazyworking.sagupalgu.user.domain.User;
 import com.lazyworking.sagupalgu.user.form.UserEditForm;
+import com.lazyworking.sagupalgu.user.form.UserPasswordForm;
 import com.lazyworking.sagupalgu.user.form.UserSaveForm;
 import com.lazyworking.sagupalgu.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 import java.util.List;
 
@@ -52,21 +52,22 @@ public class UserController {
         User user = userService.findUser(userId);
         log.info("user: {}", user);
         model.addAttribute("user", user);
+        log.info("gender:{},gender:{}, class:{}",user.getGender().getCode(),user.getGender().getValue(),user.getGender().getClass());
         return "user/user";
     }
 
-    //회원 등록 창을 넘겨준다.
+    //회원 등록 창을 띄운다.
     @GetMapping("/add")
     public String addForm(Model model) {
         //thymeleaf 기반의 th.object 활용을 위해 빈 객체를 생성해서 넘긴다.
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new UserSaveForm());
 
         return "user/addUserForm";
     }
 
-    //상품을 등록하는 로직
+    //회원을 등록하는 로직
     @PostMapping("/add")
-    public String addUsedItem(@Validated @ModelAttribute("user") UserSaveForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String addUser(@Validated @ModelAttribute("user") UserSaveForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         //에러가 발생할 경우 이전 창으로 돌아게된다.해당 경우에는 유저를 등록하는 창으로 넘어간다.
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
@@ -80,7 +81,7 @@ public class UserController {
         return "redirect:/users/{userId}";
     }
 
-    //기존 유저에 대한 수정을 담당하는 로직
+    //회원 수정창을 띄운다.
     @GetMapping("/{userId}/edit")
     public String editForm(@PathVariable Long userId, Model model) {
         //기존에 등록한 아이템을 찾아서 해당 정보를 수정 화면에 보여준다.
@@ -88,37 +89,63 @@ public class UserController {
 
         //thymeleaf 기반의 th.object 활용을 위해 빈 객체를 생성해서 넘긴다.
         model.addAttribute("user", user);
-        return "user/userEditForm";
+
+        log.info("edit user: {} ", user);
+        log.info("gender: {}", user.getGender());
+        return "user/editUserForm";
     }
 
-    //상품을 수정하는 로직
+    //회원 정보 변경 처리
     @PostMapping("/{userId}/edit")
-    public String editUsedItem(@Validated @ModelAttribute("user") UserEditForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        //에러가 발생할 경우 이전 창으로 돌아게된다.해당 경우에는 유저를 수정하는 창으로 넘어간다.
+    public String editUser(@PathVariable Long userId, @Validated @ModelAttribute("user") UserEditForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
-            return "user/userEditForm";
+            log.info("users={}", form);
+            return "user/editUserForm";
         }
 
-        Long savedUserId = userService.editUserInfo(form);
-        redirectAttributes.addAttribute("usedItemId", savedUserId);
+        Long editUserId = userService.editUserInfo(form);
+        log.info("editUserId: {}", editUserId);
+        redirectAttributes.addAttribute("userId", editUserId);
 
-        return "redirect:/users/{savedUserId}";
+        return "redirect:/users/{userId}";
     }
 
-    //유저를 삭제하기 위한 로직
+    //회원의 비밀번호 변경창을 띄운다.
+    @GetMapping("/{userId}/changePassword")
+    public String changePasswordForm(@PathVariable Long userId, Model model) {
+        User user = userService.findUser(userId);
+        UserPasswordForm form = new UserPasswordForm(userId);
+
+        model.addAttribute("user", form);
+        return "user/changePasswordForm";
+    }
+
+    //비밀번호를 변경하는 로직
+    @PostMapping("/{userId}/changePassword")
+    public String changeUserPassword(@PathVariable Long userId, @Validated @ModelAttribute("user") UserPasswordForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            log.info("errors={}", bindingResult);
+            return "user/changePasswordForm";
+        }
+        Long editUserId = userService.changePassword(form);
+        redirectAttributes.addAttribute("userId", editUserId);
+
+        return "redirect:/users/{userId}/edit";
+    }
+
+    //회원 삭제 창을 띄운다.
     @GetMapping("/{userId}/delete")
     public String deleteUsedItem(@PathVariable Long userId, Model model) {
         User user = userService.findUser(userId);
         model.addAttribute("user", user);
         log.info("deletedUser:{}", user);
-        return "user/deleteForm";
+        return "user/deleteUserForm";
     }
-
+    //회원 삭제 로직
     @PostMapping("/{userId}/delete")
     public String deleteUsedItem(@PathVariable Long userId, @ModelAttribute("user") UsedItemEditForm form,BindingResult bindingResult) {
         userService.deleteUser(form.getId());
         return "redirect:/users";
     }
-
 }
