@@ -27,18 +27,19 @@
             <p class="field-error" th:each=" err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메세지</p>
         </div>
 
-        <div>
-            <label for="name" th:text="#{label.user.name}">회원명</label>
-            <input type="text" id="name" th:field="*{name}" th:errorclass="field-error" class="form-control" placeholder="이름 입력하세요">
-            <div class="field-error" th:errors="*{name}">
-                이름 오류
-            </div>
-        </div>
+
         <div>
             <label for="email" th:text="#{label.user.email}">이메일</label>
             <input type="text" id="email" th:field="*{email}" th:errorclass="field-error" class="form-control" placeholder="이메일을 입력하세요">
             <div class="field-error" th:errors="*{email}">
                 이메일이 잘못되었습니다.
+            </div>
+        </div>
+        <div>
+            <label for="name" th:text="#{label.user.name}">회원명</label>
+            <input type="text" id="name" th:field="*{name}" th:errorclass="field-error" class="form-control" placeholder="이름 입력하세요">
+            <div class="field-error" th:errors="*{name}">
+                이름 오류
             </div>
         </div>
 
