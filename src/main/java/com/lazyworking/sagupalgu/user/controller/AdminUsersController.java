@@ -66,7 +66,7 @@ public class AdminUsersController {
     @PostMapping("/blockUser/{userId}")
     public String blockUser(@PathVariable long userId) {
         blockedUsersService.blockUser(userId);
-        return "redirect:/admin/reportedUsers";
+        return "redirect:/admin/blockedUsers";
     }
 
     @PostMapping("/freeUser/{blockedUserId}")
