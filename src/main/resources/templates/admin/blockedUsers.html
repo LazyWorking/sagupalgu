@@ -20,7 +20,7 @@
             </thead>
             <tbody>
             <tr th:each="blockUser : ${blockedUsers}">
-                <td><a href="userInfo.html" th:href="@{|/admin/userInfo/${blockUser.id}|}" th:text="${blockUser.id}">유저 ID</a></td>
+                <td><a href="userInfo.html" th:href="@{|/users/${blockUser.id}|}" th:text="${blockUser.id}">유저 ID</a></td>
                 <td th:text="${blockUser.date} ">날짜</td>
                 <td>
                     <form action="blockedUsers.html" th:action="@{|/admin/freeUser/${blockUser.id}|}" method="post">

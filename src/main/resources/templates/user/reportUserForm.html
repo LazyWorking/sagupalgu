@@ -15,17 +15,24 @@
             <p class="field-error" th:each=" err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메세지</p>
         </div>
 
+        <div hidden>
+            <label for="reporterUserId" th:text="#{label.user.id}">유저 ID</label>
+            <input type="text" id="reporterUserId" th:field="*{reporterUserId}" th:errorclass="field-error" class="form-control" placeholder=" ">
+        </div>
+
         <div>
-            <label for="name" th:text="#{label.user.id}">유저 ID</label>
-            <input type="text" id="name" th:field="*{id}" th:errorclass="field-error" class="form-control" placeholder="신고할 유저 아이디를 명시하세요">
-            <div class="field-error" th:errors="*{id}">
+            <label for="targetUserEmail" th:text="#{label.user.id}">유저 ID</label>
+            <input type="text" id="targetUserEmail" th:field="*{targetUserEmail}" th:errorclass="field-error" class="form-control" placeholder="신고할 유저 아이디를 명시하세요">
+            <div class="field-error" th:errors="*{targetUserEmail}">
                 존재하지 않는 유저입니다.
             </div>
         </div>
+
+
         <div>
-            <label for="price" th:text="#{label.user.reportContext}">가격</label>
-            <input type="text" id="price" th:field="*{context}" th:errorclass="field-error" class="form-control" placeholder="신고 사유를 입력하세요.">
-            <div class="field-error" th:errors="*{context}">
+            <label for="reportContext" th:text="#{label.user.reportContext}">신고 사유</label>
+            <input type="text" id="reportContext" th:field="*{reportContext}" th:errorclass="field-error" class="form-control" placeholder="신고 사유를 입력하세요.">
+            <div class="field-error" th:errors="*{reportContext}">
                 신고 사유를 작성해주세요.
             </div>
         </div>
