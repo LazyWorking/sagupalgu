@@ -3,12 +3,13 @@ package com.lazyworking.sagupalgu.service;
 import com.lazyworking.sagupalgu.item.domain.UsedItem;
 import com.lazyworking.sagupalgu.item.service.UsedItemService;
 import com.lazyworking.sagupalgu.user.domain.Gender;
+import com.lazyworking.sagupalgu.user.domain.ReportedUserDTO;
+import com.lazyworking.sagupalgu.user.domain.ReportedUsers;
 import com.lazyworking.sagupalgu.user.domain.User;
-import com.lazyworking.sagupalgu.user.form.UserEditForm;
-import com.lazyworking.sagupalgu.user.form.UserLoginForm;
-import com.lazyworking.sagupalgu.user.form.UserPasswordForm;
-import com.lazyworking.sagupalgu.user.form.UserSaveForm;
+import com.lazyworking.sagupalgu.user.form.*;
+import com.lazyworking.sagupalgu.user.repository.ReportedUsersRepository;
 import com.lazyworking.sagupalgu.user.repository.UserRepository;
+import com.lazyworking.sagupalgu.user.service.ReportedUsersService;
 import com.lazyworking.sagupalgu.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +35,14 @@ class UserServiceTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ReportedUsersService reportedUsersService;
+
+    @Autowired
+    private ReportedUsersRepository reportedUsersRepository;
+
+
 
     @Test
     @DisplayName("회원 등록")
@@ -151,7 +160,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("회원 로그인 실패")
-    void login_fail() {
+    void loginFail() {
         //given
         User user = userRepository.save(new User("user1", "user@email.com", "1234", LocalDateTime.now(), Gender.M));
 
@@ -161,6 +170,24 @@ class UserServiceTest {
 
         //then
         assertThat(loginStatus).isEqualTo(false);
+    }
+
+    @Test
+    @DisplayName("회원 신고하기")
+    void reportUser() {
+        //given
+        User user1 = userRepository.save(new User("user1", "user@email.com", "1234", LocalDateTime.now(), Gender.M));
+        User user2 = userRepository.save(new User("user2", "user2@email.com", "12345", LocalDateTime.now(), Gender.F));
+
+        //when
+        ReportUserForm reportUserForm = new ReportUserForm(user1.getId(),user2.getEmail(),"부적절한 언어 사용");
+        Long reportedUsersId = userService.reportUser(reportUserForm);
+        ReportedUsers reportedUser = reportedUsersRepository.findById(reportedUsersId).get();
+        
+        //then
+        assertThat(reportedUser.getReporter()).isEqualTo(user1);
+        assertThat(reportedUser.getTargetUser()).isEqualTo(user2);
+        assertThat(reportedUser.getContext()).isEqualTo(reportUserForm.getReportContext());
     }
 
 }
