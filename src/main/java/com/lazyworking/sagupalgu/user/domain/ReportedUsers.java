@@ -1,43 +1,45 @@
 package com.lazyworking.sagupalgu.user.domain;
 
-import com.lazyworking.sagupalgu.refreshToken.domain.RefreshToken;
-import com.sun.istack.NotNull;
 import lombok.*;
-import org.apache.catalina.User;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
+
 /*
  * author: JehyunJung
- * purpose: domain for reportedUsers
+ * purpose: domain for reportedUser
  * version: 1.0
  */
 @Data
 @Entity
+@NoArgsConstructor
 public class ReportedUsers {
     @Id
     @GeneratedValue
     private Long id;
-    @ManyToOne
-    @JoinColumn
-    private Users user;
 
     @ManyToOne
     @JoinColumn
-    private Users reporter;
+    private User reporter;
+
+    @ManyToOne
+    @JoinColumn
+    private User targetUser;
 
     @Column
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime date;
 
-    @Column(length = 100)
+    @Column(length = 255)
     private String context;
+
+    public ReportedUsers(User reporter, User targetUser, String context) {
+        this.reporter = reporter;
+        this.targetUser = targetUser;
+        this.date = LocalDateTime.now();
+        this.context = context;
+    }
+
 }
 

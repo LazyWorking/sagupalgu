@@ -2,23 +2,23 @@ package com.lazyworking.sagupalgu.user.domain;
 
 /*
  * author: JehyunJung
- * purpose: domain for reportedUsers
+ * purpose: domain for reportedUser
  * version: 1.0
  */
 public class ReportedUserDTO {
-    private Users user;
+    private User user;
     private Long count;
 
-    public ReportedUserDTO(Users user, Long count) {
+    public ReportedUserDTO(User user, Long count) {
         this.user = user;
         this.count = count;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

@@ -3,7 +3,7 @@ package com.lazyworking.sagupalgu.user.controller;
 import com.lazyworking.sagupalgu.user.domain.BlockedUsers;
 import com.lazyworking.sagupalgu.user.domain.ReportedUserDTO;
 import com.lazyworking.sagupalgu.user.domain.ReportedUsers;
-import com.lazyworking.sagupalgu.user.domain.Users;
+import com.lazyworking.sagupalgu.user.domain.User;
 import com.lazyworking.sagupalgu.user.service.BlockedUsersService;
 import com.lazyworking.sagupalgu.user.service.ReportedUsersService;
 import com.lazyworking.sagupalgu.user.service.UserService;
@@ -35,18 +35,6 @@ public class AdminUsersController {
         log.info("adminPage");
         return "/admin/adminPage";
     }
-    
-    //회원 관리
-   /* @GetMapping("/users")
-    public String getUserList(Model model){
-        List<User> users=userService.getUsers();
-        model.addAttribute("users", users);
-    }
-    @GetMapping("/users/{user}")
-    public String getUserInfo(Model model){
-
-    }
-    */
 
     //신고된 회원 목록
     @GetMapping("/reportedUsers")
@@ -55,15 +43,15 @@ public class AdminUsersController {
         model.addAttribute("reportedUsers", reportedUsers);
         return "admin/reportedUsers";
     }
+
     //신고된 유저의 상세 항목
     @GetMapping("/reportedUser/{userId}")
-    public String getReportedUserList(@PathVariable(name="userId") Users user, Model model) {
-        //Users user = userService.findByUserId(userId);
-        List<ReportedUsers> reportedUserDatas = reportedUsersService.getReportedUser(user);
-        model.addAttribute("userId", user.getId());
-        model.addAttribute("reportedUserDatas", reportedUserDatas);
-        log.info("user : {}", user);
-        log.info("reportedUser: {}", reportedUserDatas);
+    public String getReportedUserInfo(@PathVariable Long userId, Model model) {
+        List<ReportedUsers> reportedUsers = reportedUsersService.getTargetUser(userId);
+        model.addAttribute("userId", userId);
+        model.addAttribute("reportedUsers", reportedUsers);
+        log.info("user : {}", userId);
+        log.info("reportedUser: {}", reportedUsers);
         return "admin/reportedUser";
     }
 
@@ -76,13 +64,8 @@ public class AdminUsersController {
     }
 
     @PostMapping("/blockUser/{userId}")
-    public String blockUser(@PathVariable(name="userId") Users user ) {
-        //Users user = userService.findByUserId(userId);
-        BlockedUsers blockUser = new BlockedUsers();
-        blockUser.setDate(LocalDateTime.now());
-        blockUser.setUser(user);
-        blockedUsersService.blockUser(blockUser);
-
+    public String blockUser(@PathVariable long userId) {
+        blockedUsersService.blockUser(userId);
         return "redirect:/admin/reportedUsers";
     }
 

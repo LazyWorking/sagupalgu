@@ -3,10 +3,7 @@ package com.lazyworking.sagupalgu.user.controller;
 import com.lazyworking.sagupalgu.item.form.UsedItemEditForm;
 import com.lazyworking.sagupalgu.user.domain.Gender;
 import com.lazyworking.sagupalgu.user.domain.User;
-import com.lazyworking.sagupalgu.user.form.UserEditForm;
-import com.lazyworking.sagupalgu.user.form.UserLoginForm;
-import com.lazyworking.sagupalgu.user.form.UserPasswordForm;
-import com.lazyworking.sagupalgu.user.form.UserSaveForm;
+import com.lazyworking.sagupalgu.user.form.*;
 import com.lazyworking.sagupalgu.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -175,4 +172,27 @@ public class UserController {
         }
         return "redirect:/";
     }
+
+    //회원 등록 창을 띄운다.
+    @GetMapping("/report")
+    public String reportUserForm(Model model) {
+        ReportUserForm form = new ReportUserForm(4L);
+        //thymeleaf 기반의 th.object 활용을 위해 빈 객체를 생성해서 넘긴다.
+        model.addAttribute("reportUser", form);
+
+        return "user/reportUserForm";
+    }
+
+    //회원을 등록하는 로직
+    @PostMapping("/report")
+    public String addUser(@Validated @ModelAttribute("reportUser") ReportUserForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        //에러가 발생할 경우 이전 창으로 돌아게된다.해당 경우에는 유저를 등록하는 창으로 넘어간다.
+        if (bindingResult.hasErrors()) {
+            log.info("errors={}", bindingResult);
+            return "user/reportUserForm";
+        }
+        userService.reportUser(form);
+        return "redirect:/";
+    }
+
 }
