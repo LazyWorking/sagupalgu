@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<style>
+    html,body {
+        height: 100%;
+      }
+    #wrap {
+        min-height: 100%;
+        position: relative;
+        padding-bottom: 100px;
+      }
+
+    footer {
+        height:100px;
+        position: relative;
+        transform: translateY(-100%);
+        background-color:#f8f9fa;
+      }
+</style>
+<body>
+    <div id="wrap">
+        <!-- header -->
+        <th:block th:replace="/layout/fragments/header :: header"></th:block>
+        <!-- navbar -->
+        <th:block th:replace="/layout/fragments/navbar :: navbar"></th:block>
+        <div id="content-wrap">
+            <!-- content -->
+            <th:block layout:fragment="content"></th:block>
+        </div>
+    </div>
+    <!-- footer -->
+    <th:block th:replace="/layout/fragments/footer :: footer"></th:block>
+
+</body>
+</html>
