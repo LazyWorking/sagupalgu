@@ -1,0 +1,14 @@
+html,body {
+    height: 100%;
+}
+#wrap {
+    min-height: 100%;
+    position: relative;
+    padding-bottom: 130px;
+}
+footer {
+    height:130px;
+    position: relative;
+    transform: translateY(-100%);
+    background-color:#f8f9fa;
+}
