@@ -1,55 +1,54 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header::header"></head>
-<body>
-<div th:replace="fragments/navbar::navbar"></div>
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default_layout}">
+<th:block layout:fragment="content">
+    <div class="container">
 
-<div class="container">
-
-    <div class="py-5 text-center">
-        <h2 th:text="#{page.deleteUser}">회원 삭제</h2>
-    </div>
-
-    <form action="usedItem.html" th:action th:object="${user}" method="post">
-        <div hidden>
-            <label for="id" th:text="#{label.user.id}">회원 ID</label>
-            <input type="text" id="id" th:field="*{id}" class="form-control" readonly>
-        </div>
-        <div>
-            <label for="name" th:text="#{label.user.name}">회원명</label>
-            <input type="text" id="name" th:field="*{name}" th:errorclass="field-error" class="form-control" readonly>
-        </div>
-        <div>
-            <label for="email" th:text="#{label.user.email}">이메일</label>
-            <input type="text" id="email" th:field="*{email}" th:errorclass="field-error" class="form-control" readonly>
+        <div class="py-5 text-center">
+            <h2 th:text="#{page.deleteUser}">회원 삭제</h2>
         </div>
 
-        <div>
-            <label for="gender" th:text="#{label.user.gender}">성별</label>
-            <select id="gender" th:field="*{gender}" class="form-control" disabled>
-                <option value="">==성별 선택==</option>
-                <option th:each="gender : ${genders}" th:value="${gender.getCode()}"
-                        th:text="${gender.getValue()}">성별</option>
-            </select>
-        </div>
-
-
-        <hr class="my-4">
-
-        <div class="row">
-            <div class="col">
-                <button class="w-100 btn btn-danger btn-lg" type="submit" th:text="#{button.delete}">삭제</button>
+        <form action="usedItem.html" th:action th:object="${user}" method="post">
+            <div hidden>
+                <label for="id" th:text="#{label.user.id}">회원 ID</label>
+                <input type="text" id="id" th:field="*{id}" class="form-control" readonly>
             </div>
-            <div class="col">
-                <button class="w-100 btn btn-secondary btn-lg"
-                        onclick="location.href='user.html'"
-                        th:onclick="|location.href='@{/user/{userId}(userId=${user.id})}'|"
-                        type="button" th:text="#{button.cancel}">취소</button>
+            <div>
+                <label for="name" th:text="#{label.user.name}">회원명</label>
+                <input type="text" id="name" th:field="*{name}" th:errorclass="field-error" class="form-control" readonly>
             </div>
-        </div>
+            <div>
+                <label for="email" th:text="#{label.user.email}">이메일</label>
+                <input type="text" id="email" th:field="*{email}" th:errorclass="field-error" class="form-control" readonly>
+            </div>
 
-    </form>
+            <div>
+                <label for="gender" th:text="#{label.user.gender}">성별</label>
+                <select id="gender" th:field="*{gender}" class="form-control" disabled>
+                    <option value="">==성별 선택==</option>
+                    <option th:each="gender : ${genders}" th:value="${gender.getCode()}"
+                            th:text="${gender.getValue()}">성별</option>
+                </select>
+            </div>
 
-</div> <!-- /container -->
-</body>
+
+            <hr class="my-4">
+
+            <div class="row">
+                <div class="col">
+                    <button class="w-100 btn btn-danger btn-lg" type="submit" th:text="#{button.delete}">삭제</button>
+                </div>
+                <div class="col">
+                    <button class="w-100 btn btn-secondary btn-lg"
+                            onclick="location.href='user.html'"
+                            th:onclick="|location.href='@{/user/{userId}(userId=${user.id})}'|"
+                            type="button" th:text="#{button.cancel}">취소</button>
+                </div>
+            </div>
+
+        </form>
+
+    </div> <!-- /container -->
+</th:block>
 </html>
