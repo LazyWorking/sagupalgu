@@ -1,20 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8">
-    <link th:href="@{/css/bootstrap.min.css}"
-          href="../css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .container {
-            max-width: 560px;
-        }
-        .field-error{
-            border-color: #DC3545;
-            color: #DC3454;
-        }
-    </style>
-</head>
+<head th:replace="fragments/header::header"></head>
 <body>
+<div th:replace="fragments/navbar::navbar"></div>
 
 <div class="container">
 
@@ -53,7 +41,7 @@
 
         <div>
             <label for="gender" th:text="#{label.user.gender}">성별</label>
-            <select id="gender" th:field="*{gender}" class="form-select">
+            <select id="gender" th:field="*{gender}" class="form-control">
                 <option value="">==성별 선택==</option>
                 <option th:each="gender : ${genders}" th:value="${gender.getCode()}"
                         th:text="${gender.getValue()}">성별</option>

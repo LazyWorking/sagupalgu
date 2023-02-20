@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header"></head>
+<body>
+<div th:replace="fragments/navbar::navbar"></div>
+
+<div class="container" style="max-width: 600px">
+    <div class="py-5 text-center">
+        <h2 th:text="#{page.blockedUsers}">차단 목록</h2>
+    </div>
+    <hr class="my-4">
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th th:text="#{label.user.id}">유저ID</th>
+                <th th:text="#{label.user.blockedDate}">차단 일자</th>
+                <th th:text="#{label.user.manage}">관리</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="blockUser : ${blockedUsers}">
+                <td><a href="userInfo.html" th:href="@{|/users/${blockUser.id}|}" th:text="${blockUser.id}">유저 ID</a></td>
+                <td th:text="${blockUser.date} ">날짜</td>
+                <td>
+                    <form action="blockedUsers.html" th:action="@{|/admin/freeUser/${blockUser.id}|}" method="post">
+                        <div class="col">
+                            <button class="w-100 btn btn-success" type="submit" th:text="#{button.free}">차단 해제 하기</button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div> <!-- /container -->
+
+</body>
+</html>

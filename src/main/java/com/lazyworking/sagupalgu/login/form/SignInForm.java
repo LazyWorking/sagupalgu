@@ -1,4 +1,4 @@
-package com.lazyworking.sagupalgu.user.form;
+package com.lazyworking.sagupalgu.login.form;
 
 import com.lazyworking.sagupalgu.user.domain.Gender;
 import com.lazyworking.sagupalgu.user.domain.User;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class UserSaveForm {
+public class SignInForm {
     @NotBlank
     private String name;
 
@@ -26,7 +26,7 @@ public class UserSaveForm {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    public UserSaveForm(String name, String email, String password, Gender gender) {
+    public SignInForm(String name, String email, String password, Gender gender) {
         this.name = name;
         this.email = email;
         this.password = password;
