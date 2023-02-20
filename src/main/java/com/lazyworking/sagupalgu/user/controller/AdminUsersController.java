@@ -25,6 +25,16 @@ public class AdminUsersController {
     private final ReportedUsersService reportedUsersService;
     private final BlockedUsersService blockedUsersService;
 
+
+    //유저 목록을 반환하는 메소드
+    @GetMapping("/users")
+    public String users(Model model) {
+        List<User> users = userService.findUsers();
+        model.addAttribute("users", users);
+        return "/admin/users";
+    }
+
+
     @PostConstruct
     public void afterConstruct(){
         System.out.println("admin controller");

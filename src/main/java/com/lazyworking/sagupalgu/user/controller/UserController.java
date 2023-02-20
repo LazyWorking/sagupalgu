@@ -1,23 +1,19 @@
 package com.lazyworking.sagupalgu.user.controller;
 
 import com.lazyworking.sagupalgu.item.form.UsedItemEditForm;
+import com.lazyworking.sagupalgu.login.form.LoginForm;
 import com.lazyworking.sagupalgu.user.domain.Gender;
 import com.lazyworking.sagupalgu.user.domain.User;
 import com.lazyworking.sagupalgu.user.form.*;
 import com.lazyworking.sagupalgu.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-
-import javax.validation.Valid;
-import java.util.List;
 
 @Slf4j
 @Controller
@@ -36,15 +32,7 @@ public class UserController {
 
         return Gender.values();
     }
-
-    //유저 목록을 반환하는 메소드
-    @GetMapping
-    public String users(Model model) {
-        List<User> users = userService.findUsers();
-        model.addAttribute("users", users);
-        return "/user/users";
-    }
-
+    
     //특정 유저에 대한 조회
     @GetMapping("/{userId}")
     public String usedItem(@PathVariable Long userId, Model model) {
@@ -53,31 +41,6 @@ public class UserController {
         model.addAttribute("user", user);
         log.info("gender:{},gender:{}, class:{}", user.getGender().getCode(), user.getGender().getValue(), user.getGender().getClass());
         return "user/user";
-    }
-
-    //회원 등록 창을 띄운다.
-    @GetMapping("/add")
-    public String addForm(Model model) {
-        //thymeleaf 기반의 th.object 활용을 위해 빈 객체를 생성해서 넘긴다.
-        model.addAttribute("user", new UserSaveForm());
-
-        return "user/addUserForm";
-    }
-
-    //회원을 등록하는 로직
-    @PostMapping("/add")
-    public String addUser(@Validated @ModelAttribute("user") UserSaveForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        //에러가 발생할 경우 이전 창으로 돌아게된다.해당 경우에는 유저를 등록하는 창으로 넘어간다.
-        if (bindingResult.hasErrors()) {
-            log.info("errors={}", bindingResult);
-            return "user/addUserForm";
-        }
-
-        Long savedUserId = userService.save(form);
-        log.info("savedID: {}", savedUserId);
-        redirectAttributes.addAttribute("userId", savedUserId);
-
-        return "redirect:/users/{userId}";
     }
 
     //회원 수정창을 띄운다.
@@ -148,32 +111,7 @@ public class UserController {
         userService.deleteUser(form.getId());
         return "redirect:/users";
     }
-
-    //회원 로그인창 반환
-    @GetMapping("/login")
-    public String loginForm(Model model) {
-        model.addAttribute("user", new UserLoginForm());
-        return "user/loginForm";
-    }
-
-    //회원 로그인 처리 로직
-    @PostMapping("/login")
-    public String loginForm(@Validated @ModelAttribute("user") UserLoginForm form,BindingResult bindingResult,RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            log.info("errors: {}", bindingResult);
-            return "user/loginForm";
-        }
-
-        //로그인 에러
-        if (!userService.login(form)) {
-            log.info("form: {}, login failure", form);
-            bindingResult.reject("login_error");
-            return "user/loginForm";
-        }
-        return "redirect:/";
-    }
-
-    //회원 등록 창을 띄운다.
+    //회원 신고창 반환
     @GetMapping("/report")
     public String reportUserForm(Model model) {
         ReportUserForm form = new ReportUserForm(4L);
@@ -183,7 +121,7 @@ public class UserController {
         return "user/reportUserForm";
     }
 
-    //회원을 등록하는 로직
+    //회원을 신고처리 로직
     @PostMapping("/report")
     public String addUser(@Validated @ModelAttribute("reportUser") ReportUserForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         //에러가 발생할 경우 이전 창으로 돌아게된다.해당 경우에는 유저를 등록하는 창으로 넘어간다.

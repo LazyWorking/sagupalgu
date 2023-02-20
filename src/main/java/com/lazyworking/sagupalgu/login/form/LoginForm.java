@@ -1,21 +1,20 @@
-package com.lazyworking.sagupalgu.user.form;
+package com.lazyworking.sagupalgu.login.form;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
-public class UserLoginForm {
+public class LoginForm {
     @NotBlank
     private String email;
 
     @NotBlank
     private String password;
 
-    public UserLoginForm(String email, String password) {
+    public LoginForm(String email, String password) {
         this.email = email;
         this.password = password;
     }

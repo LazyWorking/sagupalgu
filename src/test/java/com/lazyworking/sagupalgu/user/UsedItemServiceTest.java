@@ -1,4 +1,4 @@
-package com.lazyworking.sagupalgu.service;
+package com.lazyworking.sagupalgu.user;
 
 import com.lazyworking.sagupalgu.item.domain.UsedItem;
 import com.lazyworking.sagupalgu.item.service.UsedItemService;

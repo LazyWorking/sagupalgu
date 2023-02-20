@@ -1,7 +1,8 @@
 package com.lazyworking.sagupalgu.user.domain;
 
 import lombok.Data;
-import org.apache.catalina.User;
+import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,16 +15,24 @@ import java.util.Date;
  */
 @Data
 @Entity
+@NoArgsConstructor
 public class BlockedUsers {
     @Id
     @GeneratedValue
     private Long id;
 
     @Column
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime date;
 
     @ManyToOne
     @JoinColumn
-    private Users user;
+    private User user;
+
+    public BlockedUsers(User user) {
+        this.date = LocalDateTime.now();
+        this.user = user;
+    }
+
 }
 

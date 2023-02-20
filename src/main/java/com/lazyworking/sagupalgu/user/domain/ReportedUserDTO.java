@@ -1,5 +1,7 @@
 package com.lazyworking.sagupalgu.user.domain;
 
+import lombok.Data;
+
 /*
  * author: JehyunJung
  * purpose: domain for reportedUser
