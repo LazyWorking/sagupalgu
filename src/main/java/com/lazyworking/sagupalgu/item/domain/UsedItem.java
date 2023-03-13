@@ -2,9 +2,8 @@ package com.lazyworking.sagupalgu.item.domain;
 
 import com.lazyworking.sagupalgu.category.domain.Category;
 import com.lazyworking.sagupalgu.global.converter.BooleanToYNConverter;
+import jakarta.persistence.*;
 import lombok.Data;
-
-import javax.persistence.*;
 
 /*
  * author: JehyunJung

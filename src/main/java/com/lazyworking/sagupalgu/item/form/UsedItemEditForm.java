@@ -1,8 +1,9 @@
 package com.lazyworking.sagupalgu.item.form;
+
 import com.lazyworking.sagupalgu.category.domain.Category;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-import javax.validation.constraints.NotNull;
 
 /*
  * author: JehyunJung

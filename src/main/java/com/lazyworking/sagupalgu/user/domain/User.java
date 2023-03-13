@@ -1,14 +1,11 @@
 package com.lazyworking.sagupalgu.user.domain;
 
-import com.lazyworking.sagupalgu.category.domain.Category;
-import com.lazyworking.sagupalgu.global.converter.BooleanToYNConverter;
 import com.lazyworking.sagupalgu.item.domain.UsedItem;
-import com.lazyworking.sagupalgu.user.converter.GenderConverter;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
