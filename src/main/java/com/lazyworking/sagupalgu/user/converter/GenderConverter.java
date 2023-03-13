@@ -1,8 +1,8 @@
 package com.lazyworking.sagupalgu.user.converter;
 
 import com.lazyworking.sagupalgu.user.domain.Gender;
+import jakarta.persistence.AttributeConverter;
 
-import javax.persistence.AttributeConverter;
 import java.util.EnumSet;
 import java.util.NoSuchElementException;
 

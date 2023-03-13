@@ -1,13 +1,9 @@
 package com.lazyworking.sagupalgu.user.form;
 
-import com.lazyworking.sagupalgu.category.domain.Category;
-import com.lazyworking.sagupalgu.user.domain.ReportedUsers;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 /*
  * author: JehyunJung

@@ -1,6 +1,6 @@
 package com.lazyworking.sagupalgu.global.converter;
 
-import javax.persistence.AttributeConverter;
+import jakarta.persistence.AttributeConverter;
 /*
  * author: JehyunJung
  * purpose: BooleanToStringConverter

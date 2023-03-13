@@ -2,11 +2,11 @@ package com.lazyworking.sagupalgu.category.service;
 
 import com.lazyworking.sagupalgu.category.domain.Category;
 import com.lazyworking.sagupalgu.category.repository.CategoryRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.NoSuchElementException;
 
