@@ -1,7 +1,5 @@
 package com.lazyworking.sagupalgu.user;
 
-import com.lazyworking.sagupalgu.login.form.LoginForm;
-import com.lazyworking.sagupalgu.login.form.SignInForm;
 import com.lazyworking.sagupalgu.user.domain.Gender;
 import com.lazyworking.sagupalgu.user.domain.ReportedUsers;
 import com.lazyworking.sagupalgu.user.domain.User;
