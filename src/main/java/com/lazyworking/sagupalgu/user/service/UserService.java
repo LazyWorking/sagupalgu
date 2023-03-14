@@ -66,13 +66,12 @@ public class UserService {
     @Transactional
     public Long reportUser(ReportUserForm reportUserForm) {
         User reporter = userRepository.findById(reportUserForm.getReporterUserId()).get();
-        List<User> targetUsers = userRepository.findByEmail(reportUserForm.getTargetUserEmail());
-
-        if (targetUsers.isEmpty()) {
+        User targetUser = userRepository.findByEmail(reportUserForm.getTargetUserEmail());
+        if (targetUser == null) {
             throw new IllegalStateException("신고 대상자 email이 잘못되었습니다.");
         }
 
-        ReportedUsers reportedUsers = new ReportedUsers(reporter, targetUsers.get(0), reportUserForm.getReportContext());
+        ReportedUsers reportedUsers = new ReportedUsers(reporter, targetUser, reportUserForm.getReportContext());
         reportedUsersRepository.save(reportedUsers);
 
         return reportedUsers.getId();

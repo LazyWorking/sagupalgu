@@ -1,19 +1,20 @@
 package com.lazyworking.sagupalgu.login.controller;
 
 import com.lazyworking.sagupalgu.login.service.LoginService;
-import com.lazyworking.sagupalgu.login.form.LoginForm;
 import com.lazyworking.sagupalgu.login.form.SignInForm;
 import com.lazyworking.sagupalgu.user.domain.Gender;
+import com.lazyworking.sagupalgu.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -46,37 +47,39 @@ public class LoginController {
         //에러가 발생할 경우 이전 창으로 돌아게된다.해당 경우에는 유저를 등록하는 창으로 넘어간다.
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
-            return "user/addUserForm";
+            return "login/signInForm";
         }
 
-        Long savedUserId = loginService.signIn(form);
-        log.info("savedID: {}", savedUserId);
+        //중복된 이메일인 경우 에러 처리
+        try {
+            Long savedUserId = loginService.signIn(form);
+            log.info("savedID: {}", savedUserId);
 
+        } catch (IllegalStateException exception) {
+            bindingResult.rejectValue("email","duplicateEmail");
+            return "login/signInForm";
+        }
         return "redirect:/";
     }
 
 
-    @GetMapping("/login")
-    public String getLoginForm(Model model) {
-        model.addAttribute("user", new LoginForm());
+    @RequestMapping(value={"/login","api/login"})
+    public String login(@RequestParam(value = "error", required = false) String error,
+                        @RequestParam(value = "exception", required = false) String exception, Model model){
+        model.addAttribute("error",error);
+        model.addAttribute("exception",exception);
         return "login/loginForm";
     }
 
-    //회원 로그인 처리 로직
-    @PostMapping("/login")
-    public String loginForm(@Validated @ModelAttribute("user") LoginForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            log.info("errors: {}", bindingResult);
-            return "login/loginForm";
-        }
+    @GetMapping(value="/denied")
+    public String accessDenied(@RequestParam(value = "exception", required = false) String exception, Principal principal, Model model) throws Exception {
 
-        //로그인 에러
-        if (!loginService.login(form)) {
-            log.info("form: {}, login failure", form);
-            bindingResult.reject("login_error");
-            return "login/loginForm";
-        }
-        return "redirect:/";
+        User user = (User)((UsernamePasswordAuthenticationToken)principal).getPrincipal();
+
+        model.addAttribute("username", user.getName());
+        model.addAttribute("exception", exception);
+
+        return "error/denied";
     }
 
 
