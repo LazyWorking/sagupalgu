@@ -1,12 +1,17 @@
 package com.lazyworking.sagupalgu.login.controller;
 
-import com.lazyworking.sagupalgu.login.service.LoginService;
 import com.lazyworking.sagupalgu.login.form.SignInForm;
 import com.lazyworking.sagupalgu.user.domain.Gender;
 import com.lazyworking.sagupalgu.user.domain.User;
+import com.lazyworking.sagupalgu.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,7 +25,7 @@ import java.security.Principal;
 @RequiredArgsConstructor
 @Slf4j
 public class LoginController {
-    private final LoginService loginService;
+    private final UserService userService;
 
     //성별에 대한 목록 생성
     @ModelAttribute("genders")
@@ -52,7 +57,7 @@ public class LoginController {
 
         //중복된 이메일인 경우 에러 처리
         try {
-            Long savedUserId = loginService.signIn(form);
+            Long savedUserId = userService.addUser(form);
             log.info("savedID: {}", savedUserId);
 
         } catch (IllegalStateException exception) {
@@ -69,6 +74,17 @@ public class LoginController {
         model.addAttribute("error",error);
         model.addAttribute("exception",exception);
         return "login/loginForm";
+    }
+
+    @GetMapping(value = "/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null){
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+
+        return "redirect:/";
     }
 
     @GetMapping(value="/denied")
