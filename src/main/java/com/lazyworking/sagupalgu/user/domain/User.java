@@ -1,5 +1,6 @@
 package com.lazyworking.sagupalgu.user.domain;
 
+import com.lazyworking.sagupalgu.resources.domain.RoleUser;
 import com.lazyworking.sagupalgu.item.domain.UsedItem;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,6 +36,9 @@ public class User {
 
     @OneToMany
     private List<UsedItem> usedItems;
+
+    @OneToMany(mappedBy="user",fetch = FetchType.LAZY, cascade={CascadeType.ALL})
+    private List<RoleUser> roleUsers=new ArrayList<>();
 
     public User (String name, String email, String password, LocalDateTime joinDate, Gender gender) {
         this.name = name;

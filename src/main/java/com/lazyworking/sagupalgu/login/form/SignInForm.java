@@ -21,7 +21,7 @@ public class SignInForm {
     private String email;
 
     @NotBlank
-    @Length(min=10,max=20)
+    //@Length(min=10,max=20)
     private String password;
 
     @Enumerated(EnumType.STRING)
