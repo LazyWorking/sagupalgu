@@ -15,11 +15,10 @@ public class Role {
     @Id
     @GeneratedValue
     private Long id;
-
+    //권한 이름
     private String roleName;
-
+    //권한 상세
     private String roleDesc;
-
     public Role(String roleName, String roleDesc) {
         this.roleName = roleName;
         this.roleDesc = roleDesc;

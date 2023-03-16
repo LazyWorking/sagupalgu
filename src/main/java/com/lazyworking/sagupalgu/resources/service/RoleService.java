@@ -17,19 +17,6 @@ import java.util.NoSuchElementException;
 public class RoleService {
     private final RoleRepository roleRepository;
 
-    @PostConstruct
-    @Transactional
-    void init() {
-        List<Role> roles = new ArrayList<>();
-        roles.add(new Role("USER", "유저"));
-        roles.add(new Role("ADMIN", "관리자"));
-
-        for (Role role : roles) {
-            roleRepository.save(role);
-        }
-    }
-
-
     public List<Role> findAllRoles() {
         return roleRepository.findAll();
     }
