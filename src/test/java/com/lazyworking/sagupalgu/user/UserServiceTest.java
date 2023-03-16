@@ -1,9 +1,12 @@
 package com.lazyworking.sagupalgu.user;
 
+import com.lazyworking.sagupalgu.login.form.SignInForm;
 import com.lazyworking.sagupalgu.user.domain.Gender;
 import com.lazyworking.sagupalgu.user.domain.ReportedUsers;
 import com.lazyworking.sagupalgu.user.domain.User;
-import com.lazyworking.sagupalgu.user.form.*;
+import com.lazyworking.sagupalgu.user.form.ReportUserForm;
+import com.lazyworking.sagupalgu.user.form.UserEditForm;
+import com.lazyworking.sagupalgu.user.form.UserPasswordForm;
 import com.lazyworking.sagupalgu.user.repository.ReportedUsersRepository;
 import com.lazyworking.sagupalgu.user.repository.UserRepository;
 import com.lazyworking.sagupalgu.user.service.ReportedUsersService;
@@ -37,7 +40,42 @@ class UserServiceTest {
 
     @Autowired
     private ReportedUsersRepository reportedUsersRepository;
+    @Test
+    @DisplayName("회원 등록")
+    void save() {
+        //given
+        User user= new User("user1", "user@email.com", "1234", LocalDateTime.now(), Gender.M);
+        SignInForm form = new SignInForm(user.getName(),user.getEmail(),user.getPassword(),user.getGender());
 
+        //when
+        Long savedUserId = userService.addUser(form);
+        User savedUser = userService.findUser(savedUserId);
+
+        //then
+        log.info("user: {}, saved user:{}", user.getJoinDate(), savedUser.getJoinDate());
+        assertThat(savedUser.getName()).isEqualTo(user.getName());
+        assertThat(savedUser.getEmail()).isEqualTo(user.getEmail());
+        assertThat(savedUser.getPassword()).isEqualTo(user.getPassword());
+        assertThat(savedUser.getJoinDate()).isEqualTo(user.getJoinDate());
+        assertThat(savedUser.getGender()).isEqualTo(user.getGender());
+
+        log.info("savedItem: {}", user);
+    }
+
+    @Test
+    @DisplayName("중복 이메일 회원 등록")
+    void save_duplicate_email() {
+        //given
+        User user = userRepository.save(new User("user1", "user@email.com", "1234", LocalDateTime.now(), Gender.M));
+        User user2= new User("user2", "user@email.com", "1235", LocalDateTime.now(), Gender.F);
+        SignInForm form = new SignInForm(user.getName(),user.getEmail(),user.getPassword(),user.getGender());
+
+        //when
+        //then
+        assertThatThrownBy(
+                () -> userService.addUser(form)
+        ).isInstanceOf(IllegalStateException.class);
+    }
     @Test
     @DisplayName("회원 삭제")
     void deleteById() {
