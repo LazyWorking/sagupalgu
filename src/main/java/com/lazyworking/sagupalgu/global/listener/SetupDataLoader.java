@@ -1,11 +1,7 @@
 package com.lazyworking.sagupalgu.global.listener;
 
-import com.lazyworking.sagupalgu.resources.domain.Role;
-import com.lazyworking.sagupalgu.resources.domain.RoleHierarchy;
-import com.lazyworking.sagupalgu.resources.domain.RoleUser;
-import com.lazyworking.sagupalgu.resources.repository.RoleHierarchyRepository;
-import com.lazyworking.sagupalgu.resources.repository.RoleRepository;
-import com.lazyworking.sagupalgu.resources.repository.RoleUserRepository;
+import com.lazyworking.sagupalgu.resources.domain.*;
+import com.lazyworking.sagupalgu.resources.repository.*;
 import com.lazyworking.sagupalgu.user.domain.Gender;
 import com.lazyworking.sagupalgu.user.domain.User;
 import com.lazyworking.sagupalgu.user.repository.UserRepository;
@@ -32,6 +28,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private final RoleUserRepository roleUserRepository;
 
     private final PasswordEncoder passwordEncoder;
+    private final ResourceRepository resourceRepository;
+    private final ResourceRoleRepository resourceRoleRepository;
 
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent event) {
@@ -63,8 +61,16 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createRoleUser(manager, roleManager);
 
         //권한 계층 관계 설정
-        createRoleHierarchy(roleUser,roleManagerㅋ   );
+        createRoleHierarchy(roleUser,roleManager);
         createRoleHierarchy(roleManager,roleAdmin);
+
+        //자원 생성
+        Resource adminResource=createResource(new Resource("/admin**", "", "url", 1));
+        Resource usedItemsResource=createResource(new Resource("/usedItems", "", "url", 1));
+
+        //자원 - 권한 매핑
+        createResourceRole(adminResource,roleAdmin);
+        createResourceRole(usedItemsResource,roleManager);
     }
     private User createUser(User user) {
         userRepository.save(user);
@@ -96,6 +102,17 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         }
         childRoleHierarchy.setParentRole(parentRoleHierarchy);
         roleHierarchyRepository.save(childRoleHierarchy);
+    }
+
+    private Resource createResource(Resource resource) {
+        resourceRepository.save(resource);
+        return resource;
+    }
+
+    private void createResourceRole(Resource resource, Role role) {
+        ResourceRole resourceRole = new ResourceRole();
+        resourceRole.setResourceRole(resource, role);
+        resourceRoleRepository.save(resourceRole);
     }
 
 }
