@@ -1,5 +1,6 @@
 package com.lazyworking.sagupalgu.global.security.manager;
 
+import com.lazyworking.sagupalgu.global.security.service.SecurityResourceService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,6 @@ import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.AnyRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcherEntry;
 
@@ -24,6 +24,7 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class CustomAuthorizationManager implements AuthorizationManager<HttpServletRequest> {
     private static final AuthorizationDecision DENY = new AuthorizationDecision(false);
+    private final SecurityResourceService securityResourceService;
 
     private List<RequestMatcherEntry<AuthorizationManager<RequestAuthorizationContext>>> defaultMappings = new ArrayList<>();
 
@@ -63,7 +64,7 @@ public class CustomAuthorizationManager implements AuthorizationManager<HttpServ
             if(permitMatcher.matches(request))
                 return new AuthorizationDecision(true);
 
-        List<RequestMatcherEntry<AuthorizationManager<RequestAuthorizationContext>>> mappings = new ArrayList<>();
+        List<RequestMatcherEntry<AuthorizationManager<RequestAuthorizationContext>>> mappings = securityResourceService.getUrlResourceList();
         mappings.addAll(defaultMappings);
 
         for (RequestMatcherEntry<AuthorizationManager<RequestAuthorizationContext>> mapping : mappings) {
