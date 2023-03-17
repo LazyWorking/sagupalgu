@@ -7,6 +7,10 @@ import com.lazyworking.sagupalgu.global.security.handler.FormAuthenticationSucce
 import com.lazyworking.sagupalgu.global.security.manager.CustomAuthorizationManager;
 import com.lazyworking.sagupalgu.global.security.provider.FormAuthenticationProvider;
 import com.lazyworking.sagupalgu.global.security.webdetails.FormAuthenticationDetailsSource;
+import com.lazyworking.sagupalgu.global.security.service.SecurityResourceService;
+import com.lazyworking.sagupalgu.resources.repository.ResourceRepository;
+import com.lazyworking.sagupalgu.resources.repository.ResourceRoleRepository;
+import com.lazyworking.sagupalgu.resources.service.ResourceRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -39,11 +43,9 @@ public class SecurityConfig {
     //인증을 수행하는 authentication provider
     private final FormAuthenticationProvider formAuthenticationProvider;
 
-    //계층관계 정보를 가지는 Spring 내부 객체
-    @Bean
-    public RoleHierarchyImpl roleHierarchyImpl(){
-        return new RoleHierarchyImpl();
-    }
+    //권한이 설정되어 있는 자원들을 찾기 위한 객체
+    private final SecurityResourceService securityResourceService;
+
 
     //authentication provider을 호출하는 authentication manager
     @Bean
@@ -55,7 +57,7 @@ public class SecurityConfig {
 
     //인가 검증을 수행하는 CustomAuthorizationManager
     public CustomAuthorizationManager customAuthorizationManager() {
-        CustomAuthorizationManager customAuthorizationManager = new CustomAuthorizationManager();
+        CustomAuthorizationManager customAuthorizationManager = new CustomAuthorizationManager(securityResourceService);
         //모든 접근을 허용하고자할 url 지정
         customAuthorizationManager.setPermitAlls("/","/home","/denied**","/error**","/signIn","/login**");
         //나머지 url 자원에 대해서는 인증을 필수적으로 진행하게끔 설정
