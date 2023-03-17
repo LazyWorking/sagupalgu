@@ -12,7 +12,7 @@ public class UserPasswordForm {
     private Long id;
 
     @NotBlank
-    @Length(min=10,max=20)
+    //@Length(min=10,max=20)
     private String password;
 
     public UserPasswordForm(Long id) {

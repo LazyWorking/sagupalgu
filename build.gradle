@@ -45,9 +45,18 @@ dependencies {
 	//bean validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-
 	//json-simple
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+	//Spring Security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	//model mapper
+	implementation 'org.modelmapper:modelmapper:3.1.1'
+
+	//devtools reload
+	developmentOnly "org.springframework.boot:spring-boot-devtools"
 }
 
 tasks.named('test') {
