@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="adminHeader">
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.css}"
+          href="../css/bootstrap.css" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.table.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery-3.6.1.js}"></script>
+    <style>
+        .container {
+            max-width: 560px;
+        }
+        .field-error{
+            border-color: #DC3545;
+            color: #DC3454;
+        }
+    </style>
+    <script type="text/javascript">
+            function tabChange(tabNum){
+                if(tabNum == '1'){
+                    location.href='/admin/users';
+                }else if(tabNum == '2'){
+                    location.href='/admin/roles';
+                }else if(tabNum == '3'){
+                    location.href='/admin/resources';
+                }
+            }
+        </script>
+
+</head>
+<body>
+
+</body>
+</html>
