@@ -2,6 +2,7 @@ package com.lazyworking.sagupalgu.user.domain;
 
 import com.lazyworking.sagupalgu.resources.domain.RoleUser;
 import com.lazyworking.sagupalgu.item.domain.UsedItem;
+import com.lazyworking.sagupalgu.user.form.UserManageForm;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Entity
 @Data
@@ -56,6 +58,13 @@ public class User {
 
     public void changePassword(String password) {
         this.password = password;
+    }
+
+    public void changeEverything(String name, String email, String password, Gender gender) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.gender = gender;
     }
 
 

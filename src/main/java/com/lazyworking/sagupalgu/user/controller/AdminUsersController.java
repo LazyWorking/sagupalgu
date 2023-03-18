@@ -1,21 +1,23 @@
 package com.lazyworking.sagupalgu.user.controller;
 
-import com.lazyworking.sagupalgu.user.domain.BlockedUsers;
-import com.lazyworking.sagupalgu.user.domain.ReportedUserDTO;
-import com.lazyworking.sagupalgu.user.domain.ReportedUsers;
-import com.lazyworking.sagupalgu.user.domain.User;
+import com.lazyworking.sagupalgu.resources.domain.Role;
+import com.lazyworking.sagupalgu.resources.service.RoleService;
+import com.lazyworking.sagupalgu.user.domain.*;
+import com.lazyworking.sagupalgu.user.form.UserAllDataForm;
+import com.lazyworking.sagupalgu.user.form.UserManageForm;
 import com.lazyworking.sagupalgu.user.service.BlockedUsersService;
 import com.lazyworking.sagupalgu.user.service.ReportedUsersService;
 import com.lazyworking.sagupalgu.user.service.UserService;
 import jakarta.annotation.PostConstruct;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -27,6 +29,30 @@ public class AdminUsersController {
     private final UserService userService;
     private final ReportedUsersService reportedUsersService;
     private final BlockedUsersService blockedUsersService;
+    private final RoleService roleService;
+
+    //권한에 대한 목록 생성
+    @ModelAttribute("roles")
+    public List<Role> roles(){
+        List<Role> roles = roleService.findAllRoles();
+        log.info("roles: {}", roles);
+        return roles;
+    }
+    //성별에 대한 목록 생성
+    @ModelAttribute("genders")
+    public Gender[] genders() {
+        Gender[] genders = Gender.values();
+        for (Gender gender : genders) {
+            log.info("gender: {}, code: {},value: {}", gender, gender.getCode(), gender.getValue());
+        }
+
+        return Gender.values();
+    }
+    //관리자 페이지 반환
+    @GetMapping("")
+    public String adminPage() {
+        return "/admin/adminPage";
+    }
 
 
     //유저 목록을 반환하는 메소드
@@ -34,19 +60,39 @@ public class AdminUsersController {
     public String users(Model model) {
         List<User> users = userService.findUsers();
         model.addAttribute("users", users);
-        return "/admin/users";
+        return "/admin/usercontrol/users";
     }
 
-
-    @PostConstruct
-    public void afterConstruct(){
-        System.out.println("admin controller");
+    //관리자 전용 유저 상세
+    @GetMapping("/users/{userId}")
+    public String user(@PathVariable("userId") Long userId,Model model) {
+        UserAllDataForm user = userService.findUserAllDataForm(userId);
+        model.addAttribute("user", user);
+        log.info("user:{}", user);
+        return "/admin/usercontrol/user";
     }
-    @GetMapping
-    public String getAdminPage(){
-        System.out.println("hello");
-        log.info("adminPage");
-        return "/admin/adminPage";
+
+    //관리자 전용 유저 정보 변경
+    @GetMapping("/users/{userId}/edit")
+    public String editUserForm(@PathVariable("userId") Long userId,Model model) {
+        UserManageForm userManageForm = userService.findUserManageForm(userId);
+        model.addAttribute("user", userManageForm);
+        log.info("user:{}", userManageForm);
+        return "/admin/usercontrol/manageUserForm";
+    }
+
+    @PostMapping("/users/{userId}/edit")
+    public String editUser(@PathVariable("userId") Long userId, @Validated @ModelAttribute("user") UserManageForm userManageForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            log.info("errors: {}", bindingResult);
+            return "/admin/usercontrol/manageUserForm";
+        }
+        log.info("editedUser:{}", userManageForm);
+        Long editUserId = userService.editUserInfo_manage(userManageForm);
+        log.info("editUserId: {}", editUserId);
+        redirectAttributes.addAttribute("userId", editUserId);
+
+        return "redirect:/admin/users/{userId}";
     }
 
     //신고된 회원 목록
@@ -54,7 +100,7 @@ public class AdminUsersController {
     public String getReportedUserList(Model model){
         List<ReportedUserDTO> reportedUsers=reportedUsersService.getReportedUsers();
         model.addAttribute("reportedUsers", reportedUsers);
-        return "admin/reportedUsers";
+        return "admin/usercontrol/reportedUsers";
     }
 
     //신고된 유저의 상세 항목
@@ -65,7 +111,7 @@ public class AdminUsersController {
         model.addAttribute("reportedUsers", reportedUsers);
         log.info("user : {}", userId);
         log.info("reportedUser: {}", reportedUsers);
-        return "admin/reportedUser";
+        return "admin/usercontrol/reportedUser";
     }
 
     //차단된 회원 목록
@@ -73,18 +119,18 @@ public class AdminUsersController {
     public String getBlockedUsersList(Model model){
         List<BlockedUsers> blockedUsers = blockedUsersService.getBlockedUsers();
         model.addAttribute("blockedUsers", blockedUsers);
-        return "admin/blockedUsers";
+        return "admin/usercontrol/blockedUsers";
     }
 
     @PostMapping("/blockUser/{userId}")
     public String blockUser(@PathVariable long userId) {
         blockedUsersService.blockUser(userId);
-        return "redirect:/admin/blockedUsers";
+        return "redirect:/admin/usercontrol/blockedUsers";
     }
 
     @PostMapping("/freeUser/{blockedUserId}")
     public String freeUser(@PathVariable Long blockedUserId) {
         blockedUsersService.freeUser(blockedUserId);
-        return "redirect:/admin/blockedUsers";
+        return "redirect:/admin/usercontrol/blockedUsers";
     }
 }
