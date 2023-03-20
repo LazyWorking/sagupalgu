@@ -38,7 +38,7 @@
                 <button class="w-100 btn btn-primary btn-lg"
                         onclick="location.href='editForm.html'"
                         th:onclick="|location.href='@{/users/{userId}/edit(userId=${user.id})}'|"
-                        type="button" th:text="#{page.editUser}">회원 수정</button>
+                        type="button" th:text="#{button.edit}">회원 수정</button>
             </div>
             <div class="col">
                 <button class="w-100 btn btn-secondary btn-lg"
