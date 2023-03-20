@@ -1,5 +1,6 @@
-package com.lazyworking.sagupalgu.resources.domain;
+package com.lazyworking.sagupalgu.admin.domain;
 
+import com.lazyworking.sagupalgu.admin.form.ResourceForm;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,5 +33,12 @@ public class Resource {
         this.httpMethod = httpMethod;
         this.resourceType = resourceType;
         this.orderNum = orderNum;
+    }
+    //변경 메소드
+    public void changeResourceInfo(ResourceForm resourceForm){
+        this.resourceName = resourceForm.getResourceName();
+        this.httpMethod = resourceForm.getHttpMethod();
+        this.resourceType = resourceForm.getResourceType();
+        this.orderNum = resourceForm.getOrderNum();
     }
 }

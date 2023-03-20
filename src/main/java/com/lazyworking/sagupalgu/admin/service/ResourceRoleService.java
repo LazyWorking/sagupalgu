@@ -1,7 +1,7 @@
-package com.lazyworking.sagupalgu.resources.service;
+package com.lazyworking.sagupalgu.admin.service;
 
-import com.lazyworking.sagupalgu.resources.domain.ResourceRole;
-import com.lazyworking.sagupalgu.resources.repository.ResourceRoleRepository;
+import com.lazyworking.sagupalgu.admin.domain.ResourceRole;
+import com.lazyworking.sagupalgu.admin.repository.ResourceRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

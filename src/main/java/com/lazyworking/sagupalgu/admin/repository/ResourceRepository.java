@@ -1,6 +1,6 @@
-package com.lazyworking.sagupalgu.resources.repository;
+package com.lazyworking.sagupalgu.admin.repository;
 
-import com.lazyworking.sagupalgu.resources.domain.Resource;
+import com.lazyworking.sagupalgu.admin.domain.Resource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

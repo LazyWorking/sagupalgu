@@ -1,7 +1,7 @@
 package com.lazyworking.sagupalgu.global.security.initializer;
 
 import com.lazyworking.sagupalgu.global.security.service.SecurityResourceService;
-import com.lazyworking.sagupalgu.resources.service.RoleHierarchyService;
+import com.lazyworking.sagupalgu.admin.service.RoleHierarchyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
