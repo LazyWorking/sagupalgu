@@ -1,6 +1,6 @@
-package com.lazyworking.sagupalgu.resources.repository;
+package com.lazyworking.sagupalgu.admin.repository;
 
-import com.lazyworking.sagupalgu.resources.domain.Role;
+import com.lazyworking.sagupalgu.admin.domain.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoleRepository extends JpaRepository<Role, Long> {

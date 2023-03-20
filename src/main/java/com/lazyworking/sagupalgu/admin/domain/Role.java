@@ -1,5 +1,6 @@
-package com.lazyworking.sagupalgu.resources.domain;
+package com.lazyworking.sagupalgu.admin.domain;
 
+import com.lazyworking.sagupalgu.admin.form.RoleForm;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -22,5 +23,11 @@ public class Role {
     public Role(String roleName, String roleDesc) {
         this.roleName = roleName;
         this.roleDesc = roleDesc;
+    }
+
+    public void change(RoleForm roleForm) {
+        this.roleName = roleForm.getRoleName();
+        this.roleDesc = roleForm.getRoleDesc();
+
     }
 }
