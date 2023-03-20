@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/adminPage_layout}">
+<th:block layout:fragment="content">
+    <div class="container">
+
+        <div class="py-3 text-center">
+            <h2 th:text="#{page.deleteResource}">자원 상세</h2>
+        </div>
+        <form th:action th:object="${resource}" method="post">
+            <div>
+                <label for="id" th:text="#{label.resource.id}">자원 ID</label>
+                <input type="text" id="id" class="form-control" th:value="*{id}" readonly>
+            </div>
+            <div>
+                <label for="order" th:text="#{label.resource.order}">적용 순서</label>
+                <input type="text" id="order" name="order" class="form-control" th:value="*{orderNum}" readonly>
+            </div>
+            <div>
+                <label for="name" th:text="#{label.resource.name}">자원 이름</label>
+                <input type="text" id="name" name="name" class="form-control" th:value="*{resourceName}" readonly>
+            </div>
+            <div>
+                <label for="http" th:text="#{label.resource.http}">Http Method</label>
+                <input type="text" id="http" name="http" class="form-control" th:value="*{httpMethod}" readonly>
+            </div>
+            <div>
+                <label for="type" th:text="#{label.resource.type}">자원 종류</label>
+                <input type="text" id="type" name="type" class="form-control"  th:value="*{resourceType}" readonly>
+            </div>
+
+            <div>
+                <label for="roles" th:text="#{label.resource.roles}"></label>
+                <div id="roles" th:each="role : ${roles}" class="form-check" >
+                    <input type="checkbox" th:field="*{roles}" th:value="${role.id}"
+                           class="form-check-input" disabled>
+                    <label th:for="${#ids.next('roles')}"
+                           th:text="${role.roleName}" class="form-check-label">서울</label>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row">
+                <div class="col">
+                    <button class="w-100 btn btn-primary btn-lg" type="submit" th:text="#{button.delete}">자원 삭제</button>
+                </div>
+                <div class="col">
+                    <button class="w-100 btn btn-secondary btn-lg"
+                            onclick="location.href='admin/resourcecontrol/resources.html'"
+                            th:onclick="|location.href='@{/admin/resources}'|"
+                            type="button" th:text="#{button.list}">목록으로</button>
+                </div>
+            </div>
+        </form>
+
+    </div> <!-- /container -->
+</th:block>
+</html>
