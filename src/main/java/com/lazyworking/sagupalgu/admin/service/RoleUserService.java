@@ -1,8 +1,8 @@
-package com.lazyworking.sagupalgu.resources.service;
+package com.lazyworking.sagupalgu.admin.service;
 
 
-import com.lazyworking.sagupalgu.resources.domain.RoleUser;
-import com.lazyworking.sagupalgu.resources.repository.RoleUserRepository;
+import com.lazyworking.sagupalgu.admin.domain.RoleUser;
+import com.lazyworking.sagupalgu.admin.repository.RoleUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

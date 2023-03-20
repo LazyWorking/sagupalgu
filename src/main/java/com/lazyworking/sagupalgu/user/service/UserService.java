@@ -1,25 +1,22 @@
 package com.lazyworking.sagupalgu.user.service;
 
+import com.lazyworking.sagupalgu.admin.form.UserAllDataForm;
+import com.lazyworking.sagupalgu.admin.form.UserManageForm;
 import com.lazyworking.sagupalgu.login.form.SignInForm;
-import com.lazyworking.sagupalgu.resources.domain.Role;
-import com.lazyworking.sagupalgu.resources.domain.RoleUser;
-import com.lazyworking.sagupalgu.resources.repository.RoleRepository;
-import com.lazyworking.sagupalgu.resources.repository.RoleUserRepository;
-import com.lazyworking.sagupalgu.user.domain.Gender;
+import com.lazyworking.sagupalgu.admin.domain.Role;
+import com.lazyworking.sagupalgu.admin.domain.RoleUser;
+import com.lazyworking.sagupalgu.admin.repository.RoleRepository;
+import com.lazyworking.sagupalgu.admin.repository.RoleUserRepository;
 import com.lazyworking.sagupalgu.user.domain.ReportedUsers;
 import com.lazyworking.sagupalgu.user.domain.User;
 import com.lazyworking.sagupalgu.user.form.*;
 import com.lazyworking.sagupalgu.user.repository.ReportedUsersRepository;
 import com.lazyworking.sagupalgu.user.repository.UserRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -42,6 +39,12 @@ public class UserService {
         newUser.setPassword(passwordEncoder.encode(form.getPassword()));
         checkDuplicateEmail(form.getEmail());
         newUser = userRepository.save(newUser);
+
+        Role role = roleRepository.findByRoleName("ROLE_USER");
+        RoleUser roleUser = new RoleUser();
+        roleUser.setRoleUser(newUser, role);
+        roleUserRepository.save(roleUser);
+
         return newUser.getId();
     }
     //중복 이메일 확인
@@ -68,6 +71,7 @@ public class UserService {
             for (RoleUser roleUser : user.getRoleUsers()) {
                 roleUserRepository.delete(roleUser);
             }
+            user.getRoleUsers().clear();
             //새로운 권한 부여
             userManageForm.getRoles().forEach(
                     (role) -> {

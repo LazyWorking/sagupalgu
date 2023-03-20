@@ -1,4 +1,4 @@
-package com.lazyworking.sagupalgu.resources.domain;
+package com.lazyworking.sagupalgu.admin.domain;
 
 import com.lazyworking.sagupalgu.user.domain.User;
 import jakarta.persistence.*;

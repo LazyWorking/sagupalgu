@@ -1,15 +1,19 @@
-package com.lazyworking.sagupalgu.user.controller;
+package com.lazyworking.sagupalgu.admin.controller;
 
-import com.lazyworking.sagupalgu.resources.domain.Role;
-import com.lazyworking.sagupalgu.resources.service.RoleService;
+import com.lazyworking.sagupalgu.global.security.service.SecurityResourceService;
+import com.lazyworking.sagupalgu.admin.domain.Resource;
+import com.lazyworking.sagupalgu.admin.domain.Role;
+import com.lazyworking.sagupalgu.admin.form.ResourceAddForm;
+import com.lazyworking.sagupalgu.admin.form.ResourceForm;
+import com.lazyworking.sagupalgu.admin.service.ResourceService;
+import com.lazyworking.sagupalgu.admin.service.RoleHierarchyService;
+import com.lazyworking.sagupalgu.admin.service.RoleService;
 import com.lazyworking.sagupalgu.user.domain.*;
-import com.lazyworking.sagupalgu.user.form.UserAllDataForm;
-import com.lazyworking.sagupalgu.user.form.UserManageForm;
+import com.lazyworking.sagupalgu.admin.form.UserAllDataForm;
+import com.lazyworking.sagupalgu.admin.form.UserManageForm;
 import com.lazyworking.sagupalgu.user.service.BlockedUsersService;
 import com.lazyworking.sagupalgu.user.service.ReportedUsersService;
 import com.lazyworking.sagupalgu.user.service.UserService;
-import jakarta.annotation.PostConstruct;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -30,6 +34,10 @@ public class AdminUsersController {
     private final ReportedUsersService reportedUsersService;
     private final BlockedUsersService blockedUsersService;
     private final RoleService roleService;
+    private final ResourceService resourceService;
+    private final RoleHierarchyService roleHierarchyService;
+
+    private final SecurityResourceService securityResourceService;
 
     //권한에 대한 목록 생성
     @ModelAttribute("roles")

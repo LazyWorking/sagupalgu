@@ -1,7 +1,7 @@
-package com.lazyworking.sagupalgu.resources.service;
+package com.lazyworking.sagupalgu.admin.service;
 
-import com.lazyworking.sagupalgu.resources.domain.RoleHierarchy;
-import com.lazyworking.sagupalgu.resources.repository.RoleHierarchyRepository;
+import com.lazyworking.sagupalgu.admin.domain.RoleHierarchy;
+import com.lazyworking.sagupalgu.admin.repository.RoleHierarchyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
