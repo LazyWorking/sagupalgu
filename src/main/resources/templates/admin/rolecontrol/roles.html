@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/adminPage_layout}">
+<th:block layout:fragment="content">
+    <div class="container">
+        <script type="text/javascript">
+            $(document).ready(function(){
+            });
+
+        </script>
+
+        <div id="container"><!-- maininner (s)-->
+            <div class="py-3     text-center">
+                <h2 th:text="#{page.roles}">권한 목록</h2>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <button class="btn btn-primary float-end"
+                            onclick="location.href='addRoleForm.html'"
+                            th:onclick="|location.href='@{/admin/roles/add}'|"
+                            type="button" th:text="#{page.addRole}">권한 추가</button>
+                </div>
+            </div>
+
+            <hr class="my-4">
+            <div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th th:text="#{label.role.id}">권한 id</th>
+                        <th th:text="#{label.role.name}">권한 명</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="role : ${roles}">
+                        <td><a href="/admin/rolecontrol/roles.html" th:href="@{|/admin/roles/${role.id}|}" th:text="${role.id}"></a></td>
+                        <td><a href="/admin/rolecontrol/roles.html" th:href="@{|/admin/roles/${role.id}|}" th:text="${role.roleName}"></a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</th:block>
+</html>

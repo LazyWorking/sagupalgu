@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/adminPage_layout}">
+<th:block layout:fragment="content">
+    <div class="container">
+
+        <div class="py-3 text-center">
+            <h2 th:text="#{page.role}">권한 상세</h2>
+        </div>
+
+        <div>
+            <label for="id" th:text="#{label.role.id}">권한 ID</label>
+            <input type="text" id="id" name="id" class="form-control" th:value="${role.id}" readonly>
+        </div>
+        <div>
+            <label for="order" th:text="#{label.role.name}">권한 이름</label>
+            <input type="text" id="order" name="order" class="form-control" th:value="${role.roleName}" readonly>
+        </div>
+        <div>
+            <label for="name" th:text="#{label.role.desc}">권한 설명</label>
+            <input type="text" id="name" name="name" class="form-control" th:value="${role.roleDesc}" readonly>
+        </div>
+        <hr class="my-4">
+
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg"
+                        onclick="location.href='/admin/rolecontrol/role.html'"
+                        th:onclick="|location.href='@{/admin/roles/{roleId}/edit(roleId=${role.id})}'|"
+                        type="button" th:text="#{button.edit}">권한 정보 수정</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg"
+                        onclick="location.href='/admin/rolecontrol/roles.html'"
+                        th:onclick="|location.href='@{/admin/roles}'|"
+                        type="button" th:text="#{button.list}">목록으로</button>
+            </div>
+        </div>
+
+    </div> <!-- /container -->
+</th:block>
+</html>
