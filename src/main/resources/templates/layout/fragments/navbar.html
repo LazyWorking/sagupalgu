@@ -7,6 +7,7 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
             <!-- 왼쪽 정렬 -->
             <ul class="navbar-nav">
@@ -15,6 +16,7 @@
                 </li>
             </ul>
 
+            <div sec:authorize="isAuthenticated()"><span sec:authentication="principal.name"></span>님 환영합니다.</div>
             <!-- 오른쪽 정렬 -->
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link" th:href="@{/login}" sec:authorize="isAnonymous()" th:text="#{button.login}">login</a></li>
@@ -23,8 +25,8 @@
                 <li class="nav-item"><a class="nav-link" th:href="@{/users/myPage}" sec:authorize="isAuthenticated()"  th:text="#{page.myPage}">User</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin}" sec:authorize="hasAuthority('ROLE_ADMIN')"  th:text="#{page.adminPage}">admin</a></li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/users/report" sec:authourize="isAuthenticated()" th:href="@{/users/report}">
-                        <img src="/images/siren_lamp.svg" width="20px" th:text="#{page.report}">
+                    <a class="nav-link" th:href="@{/users/report}" sec:authorize="isAuthenticated()">
+                        <img src="/images/siren_lamp.svg" width="20px" th:title="#{page.report}">
                     </a>
                 </li>
             </ul>

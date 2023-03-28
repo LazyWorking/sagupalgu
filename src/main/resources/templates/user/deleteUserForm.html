@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/default_layout}">
+      layout:decorate="~{layout/myPage_layout}">
 <th:block layout:fragment="content">
     <div class="container">
 
@@ -9,7 +9,7 @@
             <h2 th:text="#{page.deleteUser}">회원 삭제</h2>
         </div>
 
-        <form action="usedItem.html" th:action th:object="${user}" method="post">
+        <form action="user.html" th:action th:object="${user}" method="post">
             <div hidden>
                 <label for="id" th:text="#{label.user.id}">회원 ID</label>
                 <input type="text" id="id" th:field="*{id}" class="form-control" readonly>
@@ -42,7 +42,7 @@
                 <div class="col">
                     <button class="w-100 btn btn-secondary btn-lg"
                             onclick="location.href='user.html'"
-                            th:onclick="|location.href='@{/user/{userId}(userId=${user.id})}'|"
+                            th:onclick="|location.href='@{/user/myPage/userInfo}'|"
                             type="button" th:text="#{button.cancel}">취소</button>
                 </div>
             </div>

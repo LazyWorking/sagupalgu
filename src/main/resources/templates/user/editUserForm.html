@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/default_layout}">
+      layout:decorate="~{layout/myPage_layout}">
 <th:block layout:fragment="content">
     <div class="container">
 
@@ -35,7 +35,7 @@
                 <div style="display:flex">
                     <input type="password" id="password" th:field="*{password}" th:errorclass="field-error" class="form-control" readonly>
                     <button class="w-100 btn btn-secondary btn-lg" style="margin-left:5px;flex-shrink:2"
-                            onclick="location.href='changePasswordForm.html'" th:onclick="|location.href='@{/users/{userId}/changePassword(userId=${user.id})}'|" type="button" th:target="_blank" th:text="#{button.changePassword}">비밀번호 변경</button>
+                            onclick="location.href='changePasswordForm.html'" th:onclick="|location.href='@{/users/myPage/userInfo/changePassword}'|" type="button" th:target="_blank" th:text="#{button.changePassword}">비밀번호 변경</button>
                 </div>
 
 
@@ -54,16 +54,16 @@
 
             <div class="row">
                 <div class="col">
-                    <button class="w-100 btn btn-primary btn-lg" type="submit" th:text="#{button.save}">저장</button>
+                    <button class="w-100 btn btn-primary btn-lg" type="submit" th:text="#{button.edit}">저장</button>
                 </div>
                 <div class="col">
                     <button class="w-100 btn btn-danger btn-lg"
-                            onclick="location.href='userDeleteForm.html'" th:onclick="|location.href='@{/users/{userId}/delete(userId=${user.id})}'|" type="button" th:text="#{button.delete}">회원 삭제</button>
+                            onclick="location.href='userDeleteForm.html'" th:onclick="|location.href='@{/users/myPage/userInfo/delete}'|" type="button" th:text="#{button.signOut}">회원 삭제</button>
                 </div>
                 <div class="col">
                     <button class="w-100 btn btn-secondary btn-lg"
                             onclick="location.href='user.html'"
-                            th:onclick="|location.href='@{/users/{userId}(userId=${user.id})}'|"
+                            th:onclick="|location.href='@{/users/myPage/userInfo}'|"
                             type="button" th:text="#{button.cancel}">취소</button>
                 </div>
             </div>
