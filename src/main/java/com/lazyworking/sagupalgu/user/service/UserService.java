@@ -2,6 +2,7 @@ package com.lazyworking.sagupalgu.user.service;
 
 import com.lazyworking.sagupalgu.admin.form.UserAllDataForm;
 import com.lazyworking.sagupalgu.admin.form.UserManageForm;
+import com.lazyworking.sagupalgu.global.security.service.AccountContext;
 import com.lazyworking.sagupalgu.login.form.SignInForm;
 import com.lazyworking.sagupalgu.admin.domain.Role;
 import com.lazyworking.sagupalgu.admin.domain.RoleUser;
@@ -13,6 +14,11 @@ import com.lazyworking.sagupalgu.user.form.*;
 import com.lazyworking.sagupalgu.user.repository.ReportedUsersRepository;
 import com.lazyworking.sagupalgu.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,12 +37,10 @@ public class UserService {
     private final RoleRepository roleRepository;
 
     private final RoleUserRepository roleUserRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Long addUser(SignInForm form){
         User newUser = form.toEntity();
-        newUser.setPassword(passwordEncoder.encode(form.getPassword()));
         checkDuplicateEmail(form.getEmail());
         newUser = userRepository.save(newUser);
 
@@ -89,7 +93,7 @@ public class UserService {
     @Transactional
     public Long changePassword(UserPasswordForm form) {
         User user = userRepository.findById(form.getId()).orElseThrow(()-> new NoSuchElementException());
-        user.changePassword(passwordEncoder.encode(form.getPassword()));
+        user.changePassword(form.getPassword());
         return user.getId();
     }
     //회원 목록 조회
@@ -136,6 +140,4 @@ public class UserService {
 
         return reportedUsers.getId();
     }
-
-
 }

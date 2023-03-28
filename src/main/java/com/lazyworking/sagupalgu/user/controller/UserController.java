@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
-@Controller
+//@Controller
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
