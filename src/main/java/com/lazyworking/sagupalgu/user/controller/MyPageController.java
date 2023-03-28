@@ -2,7 +2,9 @@ package com.lazyworking.sagupalgu.user.controller;
 
 import com.lazyworking.sagupalgu.global.security.service.AccountContext;
 import com.lazyworking.sagupalgu.global.security.service.CustomUserDetailsService;
+import com.lazyworking.sagupalgu.item.domain.UsedItem;
 import com.lazyworking.sagupalgu.item.form.UsedItemEditForm;
+import com.lazyworking.sagupalgu.item.service.UsedItemService;
 import com.lazyworking.sagupalgu.user.domain.Gender;
 import com.lazyworking.sagupalgu.user.domain.User;
 import com.lazyworking.sagupalgu.user.form.ReportUserForm;
@@ -27,6 +29,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -35,6 +39,8 @@ public class MyPageController {
     private final UserService userService;
     private final CustomUserDetailsService customUserDetailsService;
     private final PasswordEncoder passwordEncoder;
+
+    private final UsedItemService usedItemService;
 
     //성별에 대한 목록 생성
     @ModelAttribute("genders")
@@ -60,7 +66,7 @@ public class MyPageController {
         log.info("user: {}", user);
         model.addAttribute("user", user);
         log.info("gender:{},gender:{}, class:{}", user.getGender().getCode(), user.getGender().getValue(), user.getGender().getClass());
-        return "user/user";
+        return "user/userinfo/userInfo";
     }
 
     //회원 수정창을 띄운다.
@@ -73,7 +79,7 @@ public class MyPageController {
 
         log.info("edit user: {} ", user);
         log.info("gender: {}", user.getGender());
-        return "user/editUserForm";
+        return "user/userinfo/editUserForm";
     }
 
     //회원 정보 변경 처리
@@ -82,7 +88,7 @@ public class MyPageController {
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             log.info("users={}", form);
-            return "user/editUserForm";
+            return "user/userinfo/editUserForm";
         }
         form.setPassword(passwordEncoder.encode(form.getPassword()));
         Long editUserId = userService.editUserInfo(form);
@@ -98,7 +104,7 @@ public class MyPageController {
         User user = getUserFromSecurityContext();
         UserPasswordForm form = new UserPasswordForm(user.getId());
         model.addAttribute("user", form);
-        return "user/changePasswordForm";
+        return "user/userinfo/changePasswordForm";
     }
 
     //비밀번호를 변경하는 로직
@@ -106,7 +112,7 @@ public class MyPageController {
     public String changeUserPassword(@Validated @ModelAttribute("user") UserPasswordForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
-            return "user/changePasswordForm";
+            return "user/userinfo/changePasswordForm";
         }
         form.setPassword(passwordEncoder.encode(form.getPassword()));
         Long editUserId = userService.changePassword(form);
@@ -122,7 +128,7 @@ public class MyPageController {
         User user = getUserFromSecurityContext();
         model.addAttribute("user", user);
         log.info("deletedUser:{}", user);
-        return "user/deleteUserForm";
+        return "user/userinfo/deleteUserForm";
     }
 
     //회원 삭제 로직
@@ -131,6 +137,17 @@ public class MyPageController {
         userService.deleteUser(form.getId());
         return "redirect:/logout";
     }
+
+    //회원이 등록한 상품 목록 조회
+    @GetMapping("/usedItems")
+    public String usedItems(Model model) {
+        User user = getUserFromSecurityContext();
+        List<UsedItem> usedItemList = usedItemService.getUsedItemsBySeller(user);
+        log.info("user usedItems:{}", usedItemList);
+        model.addAttribute("usedItems", usedItemList);
+        return "/user/useditem/usedItems";
+    }
+
     private void setNewContext(Long id) {
         AccountContext accountContext = (AccountContext) customUserDetailsService.loadUserById(id);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(accountContext.getUser(), null, accountContext.getAuthorities());
