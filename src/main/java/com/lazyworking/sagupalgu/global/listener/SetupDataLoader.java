@@ -2,9 +2,14 @@ package com.lazyworking.sagupalgu.global.listener;
 
 import com.lazyworking.sagupalgu.admin.domain.*;
 import com.lazyworking.sagupalgu.admin.repository.*;
+import com.lazyworking.sagupalgu.category.domain.Category;
+import com.lazyworking.sagupalgu.category.repository.CategoryRepository;
+import com.lazyworking.sagupalgu.item.domain.UsedItem;
+import com.lazyworking.sagupalgu.item.repository.UsedItemRepository;
 import com.lazyworking.sagupalgu.user.domain.Gender;
 import com.lazyworking.sagupalgu.user.domain.User;
 import com.lazyworking.sagupalgu.user.repository.UserRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -31,6 +36,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private final ResourceRepository resourceRepository;
     private final ResourceRoleRepository resourceRoleRepository;
 
+    private final CategoryRepository categoryRepository;
+
+    private final UsedItemRepository usedItemRepository;
+
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent event) {
 
@@ -47,6 +56,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         //초기 유저 생성
         User user= createUser(new User("user","user@email.com",passwordEncoder.encode("1234"), LocalDateTime.now(), Gender.M));
+        User user2= createUser(new User("user2","user2@email.com",passwordEncoder.encode("1234"), LocalDateTime.now(), Gender.M));
         User manager=createUser(new User("manager","manager@email.com",passwordEncoder.encode("1234"), LocalDateTime.now(),Gender.F));
         User admin=createUser(new User("admin","admin@email.com",passwordEncoder.encode("1234"), LocalDateTime.now(),Gender.F));
 
@@ -66,11 +76,24 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         //자원 생성
         Resource adminResource=createResource(new Resource("/admin**", "", "url", 1));
-        Resource usedItemsResource=createResource(new Resource("/usedItems", "", "url", 1));
+        Resource usedItemsResource=createResource(new Resource("/usedItems/**", "", "url", 1));
 
         //자원 - 권한 매핑
         createResourceRole(adminResource,roleAdmin);
-        createResourceRole(usedItemsResource,roleManager);
+        createResourceRole(usedItemsResource,roleUser);
+
+        //카테고리 생성
+        Category category1=createCategory("category1");
+        Category category2=createCategory("category2");
+        Category category3=createCategory("category3");
+
+        //상품 생성
+        createUsedItem(new UsedItem("item1",10000,false,"item1 is something"),user,category1);
+        createUsedItem(new UsedItem("item2",20000,true,"item2 is something"),user,category2);
+        createUsedItem(new UsedItem("item3",50000,false,"item3 is something"),user,category3);
+
+        createUsedItem(new UsedItem("item4",80000,true,"item4 is something"),user2,category1);
+        createUsedItem(new UsedItem("item5",30000,false,"item5 is something"),user2,category3);
     }
     private User createUser(User user) {
         userRepository.save(user);
@@ -113,6 +136,18 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         ResourceRole resourceRole = new ResourceRole();
         resourceRole.setResourceRole(resource, role);
         resourceRoleRepository.save(resourceRole);
+    }
+
+    private Category createCategory(String name){
+        Category category = new Category();
+        category.setName(name);
+        return categoryRepository.save(category);
+    }
+
+    private UsedItem createUsedItem(UsedItem usedItem,User user, Category category) {
+        usedItem.setSeller(user);
+        usedItem.setCategory(category);
+        return usedItemRepository.save(usedItem);
     }
 
 }
