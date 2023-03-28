@@ -30,7 +30,7 @@
             </div>
             <div>
                 <label for="category" th:text="#{label.usedItem.category}">분류</label>
-                <select th:field="*{category}" id="category" class="form-select">
+                <select th:field="*{category}" id="category" class="form-control">
                     <option value="">==분류 선택==</option>
                     <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">category</option>
                 </select>

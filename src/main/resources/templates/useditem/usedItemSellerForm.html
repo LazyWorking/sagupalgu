@@ -23,14 +23,19 @@
         </div>
         <div>
             <label for="category" th:text="#{label.usedItem.category}">분류</label>
-            <select th:field="*{usedItem.category.id}" id="category" class="form-select" disabled>
+            <select th:field="*{usedItem.category.id}" id="category" class="form-control" disabled>
                 <option value="">==분류 선택==</option>
                 <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">category</option>
             </select>
         </div>
         <div>
             <label for="ifSelled" class="form-check-label" th:text="#{label.usedItem.ifSelled}">판매 여부</label>
-            <input type="checkbox" id="ifSelled" th:field="${usedItem.ifSelled}" class="form-check-input" disabled>
+            <input type="checkbox" style="margin-left:5px" id="ifSelled" th:field="${usedItem.ifSelled}" class="form-check-input" disabled>
+        </div>
+
+        <div>
+            <label for="seller" th:text="#{label.usedItem.seller}">판매자</label>
+            <input type="text" id="seller" name="seller" class="form-control" value="user" th:value="${usedItem.seller.email}" readonly>
         </div>
 
 
@@ -53,7 +58,7 @@
             <div class="col">
                 <button class="w-100 btn btn-secondary btn-lg"
                         onclick="location.href='usedItems.html'"
-                        th:onclick="|location.href='@{/usedItems/}'|"
+                        th:onclick="|location.href='@{/users/myPage/usedItems/}'|"
                         type="button" th:text="#{button.list}">목록으로</button>
             </div>
         </div>
