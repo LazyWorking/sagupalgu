@@ -1,6 +1,6 @@
 package com.lazyworking.sagupalgu.user.domain;
 
-import com.lazyworking.sagupalgu.resources.domain.RoleUser;
+import com.lazyworking.sagupalgu.admin.domain.RoleUser;
 import com.lazyworking.sagupalgu.item.domain.UsedItem;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -56,6 +56,13 @@ public class User {
 
     public void changePassword(String password) {
         this.password = password;
+    }
+
+    public void changeEverything(String name, String email, String password, Gender gender) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.gender = gender;
     }
 
 

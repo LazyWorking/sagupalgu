@@ -1,7 +1,7 @@
 package com.lazyworking.sagupalgu.global.security.service;
 
-import com.lazyworking.sagupalgu.resources.domain.Resource;
-import com.lazyworking.sagupalgu.resources.repository.ResourceRepository;
+import com.lazyworking.sagupalgu.admin.domain.Resource;
+import com.lazyworking.sagupalgu.admin.repository.ResourceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authorization.AuthorityAuthorizationManager;

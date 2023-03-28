@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/default_layout}">
+      layout:decorate="~{layout/adminPage_layout}">
 <th:block layout:fragment="content">
     <div class="container">
 
-        <div class="py-5 text-center">
+        <div class="py-3 text-center">
             <h2 th:text="#{page.user}">회원 상세</h2>
         </div>
 
-        <div hidden>
+        <div>
             <label for="id" th:text="#{label.user.id}">회원 ID</label>
             <input type="text" id="id" name="id" class="form-control" value="1" th:value="${user.id}" readonly>
+        </div>
+        <div>
+            <label for="joinDate" th:text="#{label.user.joinDate}">회원가입 일자</label>
+            <input type="text" id="joinDate" name="joinDate" class="form-control" value="23.02.12" th:value="${{user.joinDate}}" readonly>
         </div>
         <div>
             <label for="email" th:text="#{label.user.email}">이메일</label>
@@ -27,8 +31,13 @@
         </div>
 
         <div>
-            <label for="joinDate" th:text="#{label.user.joinDate}">회원가입 일자</label>
-            <input type="text" id="joinDate" name="joinDate" class="form-control" value="23.02.12" th:value="${{user.joinDate}}" readonly>
+            <label for="roles" th:text="#{label.user.roles}"></label>
+            <div id="roles" th:each="role : ${roles}" class="form-check" >
+                <input type="checkbox" th:field="*{user.roles}" th:value="${role.id}"
+                       class="form-check-input" disabled>
+                <label th:for="${#ids.next('roles')}"
+                       th:text="${role.roleName}" class="form-check-label">서울</label>
+            </div>
         </div>
 
         <hr class="my-4">
@@ -37,13 +46,13 @@
             <div class="col">
                 <button class="w-100 btn btn-primary btn-lg"
                         onclick="location.href='editForm.html'"
-                        th:onclick="|location.href='@{/users/{userId}/edit(userId=${user.id})}'|"
-                        type="button" th:text="#{button.edit}">회원 수정</button>
+                        th:onclick="|location.href='@{/admin/users/{userId}/edit(userId=${user.id})}'|"
+                        type="button" th:text="#{page.editUser}">회원 수정</button>
             </div>
             <div class="col">
                 <button class="w-100 btn btn-secondary btn-lg"
                         onclick="location.href='users.html'"
-                        th:onclick="|location.href='@{/users/}'|"
+                        th:onclick="|location.href='@{/admin/users/{userId}(userId=${user.id})}'|"
                         type="button" th:text="#{button.list}">목록으로</button>
             </div>
         </div>

@@ -8,15 +8,11 @@ import com.lazyworking.sagupalgu.global.security.manager.CustomAuthorizationMana
 import com.lazyworking.sagupalgu.global.security.provider.FormAuthenticationProvider;
 import com.lazyworking.sagupalgu.global.security.webdetails.FormAuthenticationDetailsSource;
 import com.lazyworking.sagupalgu.global.security.service.SecurityResourceService;
-import com.lazyworking.sagupalgu.resources.repository.ResourceRepository;
-import com.lazyworking.sagupalgu.resources.repository.ResourceRoleRepository;
-import com.lazyworking.sagupalgu.resources.service.ResourceRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;

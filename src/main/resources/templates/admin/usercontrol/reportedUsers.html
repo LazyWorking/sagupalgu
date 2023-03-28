@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/adminPage_layout}">
+<th:block layout:fragment="content">
+
+    <div class="container" style="max-width: 600px">
+        <div class="py-3 text-center">
+            <h2 th:text="#{page.reportedUsers}">신고 목록</h2>
+        </div>
+        <hr class="my-4">
+        <div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th th:text="#{label.user.id}">유저ID</th>
+                    <th th:text="#{label.user.reportCount}">신고 접수 횟수</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="reportedUser : ${reportedUsers}">
+                    <td><a href="reportedUser.html" th:href="@{|/admin/reportedUser/${reportedUser.user.id}|}" th:text="${reportedUser.user.id}">유저 ID</a></td>
+                    <td th:text="${reportedUser.count}">2</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div> <!-- /container -->
+
+</th:block>
+</html>

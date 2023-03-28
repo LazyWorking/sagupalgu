@@ -1,27 +1,25 @@
 package com.lazyworking.sagupalgu.user.service;
 
+import com.lazyworking.sagupalgu.admin.form.UserAllDataForm;
+import com.lazyworking.sagupalgu.admin.form.UserManageForm;
 import com.lazyworking.sagupalgu.login.form.SignInForm;
-import com.lazyworking.sagupalgu.resources.domain.Role;
-import com.lazyworking.sagupalgu.resources.domain.RoleUser;
-import com.lazyworking.sagupalgu.resources.repository.RoleRepository;
-import com.lazyworking.sagupalgu.resources.repository.RoleUserRepository;
-import com.lazyworking.sagupalgu.user.domain.Gender;
+import com.lazyworking.sagupalgu.admin.domain.Role;
+import com.lazyworking.sagupalgu.admin.domain.RoleUser;
+import com.lazyworking.sagupalgu.admin.repository.RoleRepository;
+import com.lazyworking.sagupalgu.admin.repository.RoleUserRepository;
 import com.lazyworking.sagupalgu.user.domain.ReportedUsers;
 import com.lazyworking.sagupalgu.user.domain.User;
-import com.lazyworking.sagupalgu.user.form.ReportUserForm;
-import com.lazyworking.sagupalgu.user.form.UserEditForm;
-import com.lazyworking.sagupalgu.user.form.UserPasswordForm;
+import com.lazyworking.sagupalgu.user.form.*;
 import com.lazyworking.sagupalgu.user.repository.ReportedUsersRepository;
 import com.lazyworking.sagupalgu.user.repository.UserRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +39,12 @@ public class UserService {
         newUser.setPassword(passwordEncoder.encode(form.getPassword()));
         checkDuplicateEmail(form.getEmail());
         newUser = userRepository.save(newUser);
+
+        Role role = roleRepository.findByRoleName("ROLE_USER");
+        RoleUser roleUser = new RoleUser();
+        roleUser.setRoleUser(newUser, role);
+        roleUserRepository.save(roleUser);
+
         return newUser.getId();
     }
     //중복 이메일 확인
@@ -57,11 +61,35 @@ public class UserService {
         user.change(form.getName(),form.getGender());
         return user.getId();
     }
+    //회원 정보 변경 --> 관리자 전용
+    @Transactional
+    public Long editUserInfo_manage(UserManageForm userManageForm) {
+        User user = userRepository.findById(userManageForm.getId()).orElseThrow(()-> new NoSuchElementException());
+        List<Role> currentRoles = user.getRoleUsers().stream().map((roleUser)-> roleUser.getRole()).collect(Collectors.toList());
+        if(!userManageForm.getRoles().equals(currentRoles)){
+            //기존 권한 삭제
+            for (RoleUser roleUser : user.getRoleUsers()) {
+                roleUserRepository.delete(roleUser);
+            }
+            user.getRoleUsers().clear();
+            //새로운 권한 부여
+            userManageForm.getRoles().forEach(
+                    (role) -> {
+                        RoleUser roleUser = new RoleUser();
+                        roleUser.setRoleUser(user, role);
+                        roleUserRepository.save(roleUser);
+                    }
+            );
+        }
+        //회원 정보 변경
+        user.changeEverything(userManageForm.getName(), userManageForm.getEmail(), user.getPassword(), userManageForm.getGender());
+        return user.getId();
+    }
     //회원 비밀번호 변경
     @Transactional
     public Long changePassword(UserPasswordForm form) {
         User user = userRepository.findById(form.getId()).orElseThrow(()-> new NoSuchElementException());
-        user.changePassword(form.getPassword());
+        user.changePassword(passwordEncoder.encode(form.getPassword()));
         return user.getId();
     }
     //회원 목록 조회
@@ -73,6 +101,22 @@ public class UserService {
     public User findUser(Long id) {
         return userRepository.findById(id).orElseThrow(()-> new NoSuchElementException());
     }
+    //관리자 전용 회원 조회
+    public UserManageForm findUserManageForm(Long id){
+        User user = findUser(id);
+        List<Role> roles = user.getRoleUsers().stream().map((roleUser) -> roleUser.getRole()).collect(Collectors.toList());
+        UserManageForm userManageForm = new UserManageForm(user.getId(),user.getName(),user.getEmail(),user.getPassword(),user.getGender(),roles);
+        return userManageForm;
+    }
+    //모든 정보가 포함된 유저의 상세 정보
+    public UserAllDataForm findUserAllDataForm(Long id) {
+        User user = findUser(id);
+        List<Role> roles = user.getRoleUsers().stream().map((roleUser) -> roleUser.getRole()).collect(Collectors.toList());
+        UserAllDataForm userAllDataForm = new UserAllDataForm(user.getId(),user.getJoinDate(),user.getName(),user.getEmail(),user.getPassword(),user.getGender(),roles);
+        return userAllDataForm;
+    }
+
+
     //회원 삭제
     @Transactional
     public void deleteUser(long id) {
@@ -92,4 +136,6 @@ public class UserService {
 
         return reportedUsers.getId();
     }
+
+
 }

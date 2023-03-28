@@ -1,7 +1,7 @@
 package com.lazyworking.sagupalgu.global.listener;
 
-import com.lazyworking.sagupalgu.resources.domain.*;
-import com.lazyworking.sagupalgu.resources.repository.*;
+import com.lazyworking.sagupalgu.admin.domain.*;
+import com.lazyworking.sagupalgu.admin.repository.*;
 import com.lazyworking.sagupalgu.user.domain.Gender;
 import com.lazyworking.sagupalgu.user.domain.User;
 import com.lazyworking.sagupalgu.user.repository.UserRepository;

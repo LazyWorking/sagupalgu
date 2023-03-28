@@ -20,7 +20,8 @@
                 <li class="nav-item"><a class="nav-link" th:href="@{/login}" sec:authorize="isAnonymous()" th:text="#{button.login}">login</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/logout}" sec:authorize="isAuthenticated()" th:text="#{button.logout}">logout</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/signIn}" sec:authorize="isAnonymous()" th:text="#{button.signIn}">sign in</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/admin}" sec:authorize="hasAuthority('ROLE_ADMIN')"  th:text="#{page.admin}">admin</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/users/myPage}" sec:authorize="isAuthenticated()"  th:text="#{page.myPage}">User</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin}" sec:authorize="hasAuthority('ROLE_ADMIN')"  th:text="#{page.adminPage}">admin</a></li>
                 <li class="nav-item">
                     <a class="nav-link" href="/users/report" sec:authourize="isAuthenticated()" th:href="@{/users/report}">
                         <img src="/images/siren_lamp.svg" width="20px" th:text="#{page.report}">
