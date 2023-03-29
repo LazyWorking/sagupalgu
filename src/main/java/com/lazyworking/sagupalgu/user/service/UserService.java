@@ -109,14 +109,14 @@ public class UserService {
     public UserManageForm findUserManageForm(Long id){
         User user = findUser(id);
         List<Role> roles = user.getRoleUsers().stream().map((roleUser) -> roleUser.getRole()).collect(Collectors.toList());
-        UserManageForm userManageForm = new UserManageForm(user.getId(),user.getName(),user.getEmail(),user.getPassword(),user.getGender(),roles);
+        UserManageForm userManageForm = new UserManageForm(user.getId(),user.getName(),user.getEmail(),user.getPassword(),user.getGender(),user.getLocked(),roles);
         return userManageForm;
     }
     //모든 정보가 포함된 유저의 상세 정보
     public UserAllDataForm findUserAllDataForm(Long id) {
         User user = findUser(id);
         List<Role> roles = user.getRoleUsers().stream().map((roleUser) -> roleUser.getRole()).collect(Collectors.toList());
-        UserAllDataForm userAllDataForm = new UserAllDataForm(user.getId(),user.getJoinDate(),user.getName(),user.getEmail(),user.getPassword(),user.getGender(),roles);
+        UserAllDataForm userAllDataForm = new UserAllDataForm(user.getId(),user.getJoinDate(),user.getName(),user.getEmail(),user.getPassword(),user.getGender(),user.getLocked(),roles);
         return userAllDataForm;
     }
 
@@ -124,6 +124,11 @@ public class UserService {
     //회원 삭제
     @Transactional
     public void deleteUser(long id) {
+        User user = userRepository.findById(id).get();
+        for (RoleUser roleUser : user.getRoleUsers()) {
+            roleUserRepository.delete(roleUser);
+        }
+        user.getRoleUsers().clear();
         userRepository.deleteById(id);
     }
 
@@ -144,4 +149,5 @@ public class UserService {
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
 }

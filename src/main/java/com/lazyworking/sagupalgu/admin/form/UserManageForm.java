@@ -25,14 +25,17 @@ public class UserManageForm {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    private Boolean locked;
+
     private List<Role> roles;
 
-    public UserManageForm(Long id, String name, String email, String password, Gender gender, List<Role> roles) {
+    public UserManageForm(Long id, String name, String email, String password, Gender gender, Boolean locked, List<Role> roles) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.gender = gender;
+        this.locked = locked;
         this.roles = roles;
     }
 }

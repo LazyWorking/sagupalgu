@@ -125,7 +125,7 @@ public class MyPageController {
 
     //회원 삭제 창을 띄운다.
     @GetMapping("/userInfo/delete")
-    public String deleteUsedItem(Model model) {
+    public String deleteUserForm(Model model) {
         User user = AuthenticationUtils.getUserFromSecurityContext();
         model.addAttribute("user", user);
         log.info("deletedUser:{}", user);
@@ -134,7 +134,7 @@ public class MyPageController {
 
     //회원 삭제 로직
     @PostMapping("/userInfo/delete")
-    public String deleteUsedItem(@ModelAttribute("user") UsedItemEditForm form, BindingResult bindingResult) {
+    public String deleteUser(@ModelAttribute("user") UserEditForm form, BindingResult bindingResult) {
         userService.deleteUser(form.getId());
         return "redirect:/logout";
     }
