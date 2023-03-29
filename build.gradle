@@ -39,9 +39,6 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
 
-	//httpclient(Get jsonApi from another server)
-	implementation 'org.apache.httpcomponents:httpclient:4.5.13'
-
 	//bean validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
