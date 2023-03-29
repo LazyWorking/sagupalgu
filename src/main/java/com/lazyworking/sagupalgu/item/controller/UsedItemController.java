@@ -58,7 +58,7 @@ public class UsedItemController {
         User user = getUserFromSecurityContext();
         log.info("usedItem: {},user: {} , equality: {}", usedItem, user,usedItem.getSeller().equals(user));
         //해당 상품을 등록한 사용자인경우 상품 관리창으로 이동
-        if(usedItem.getSeller().equals(user))
+        if(usedItem.getSeller().getEmail().equals(user.getEmail()))
             return "useditem/usedItemSellerForm";
         else
             return "useditem/usedItemCustomerForm";

@@ -34,10 +34,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @OneToMany
-    private List<UsedItem> usedItems;
+    @OneToMany(mappedBy="seller",fetch = FetchType.LAZY, cascade={CascadeType.ALL}, orphanRemoval = true)
+    private List<UsedItem> usedItems=new ArrayList<>();
 
-    @OneToMany(mappedBy="user",fetch = FetchType.LAZY, cascade={CascadeType.ALL})
+    @OneToMany(mappedBy="user")
     private List<RoleUser> roleUsers=new ArrayList<>();
 
     public User (String name, String email, String password, LocalDateTime joinDate, Gender gender) {
