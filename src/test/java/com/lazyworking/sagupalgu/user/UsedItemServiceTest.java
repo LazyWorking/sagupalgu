@@ -29,7 +29,8 @@ class UsedItemServiceTest {
         item.setContext("Item1 is ~~");
         item.setIfSelled(false);
         //when
-        UsedItem savedItem = usedItemService.save(item);
+        Long savedItemId = usedItemService.save(item);
+        UsedItem savedItem = usedItemService.findById(savedItemId);
 
         //then
         assertThat(item).isEqualTo(savedItem);
@@ -45,15 +46,15 @@ class UsedItemServiceTest {
         item.setPrice(1234);
         item.setContext("Item1 is ~~");
         item.setIfSelled(false);
-        UsedItem savedItem = usedItemService.save(item);
+        Long usedItemId = usedItemService.save(item);
 
         //when
-        usedItemService.deleteById(savedItem.getId());
+        usedItemService.deleteById(usedItemId);
 
         //then
         //이미 삭제한 아이템에 대한 조회를 수행한 경우 NoSuchElementException 에러가 발생하게 된다.
         assertThatThrownBy(() -> {
-            UsedItem searchItem = usedItemService.findById(savedItem.getId());
+            UsedItem searchItem = usedItemService.findById(usedItemId);
         }).isInstanceOf(NoSuchElementException.class);
     }
 
@@ -67,11 +68,11 @@ class UsedItemServiceTest {
         item.setContext("Item1 is ~~");
         item.setIfSelled(false);
         //when
-        UsedItem savedItem = usedItemService.save(item);
-        UsedItem searchItem = usedItemService.findById(savedItem.getId());
+        Long savedItemId = usedItemService.save(item);
+        UsedItem searchItem = usedItemService.findById(savedItemId);
 
         //then
-        assertThat(searchItem).isEqualTo(savedItem);
+        assertThat(searchItem).isEqualTo(item);
         log.info("searchItem: {}", searchItem);
     }
 

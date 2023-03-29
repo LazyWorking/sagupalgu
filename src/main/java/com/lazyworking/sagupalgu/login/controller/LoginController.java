@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,7 @@ import java.security.Principal;
 @Slf4j
 public class LoginController {
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     //성별에 대한 목록 생성
     @ModelAttribute("genders")
@@ -54,6 +56,8 @@ public class LoginController {
             log.info("errors={}", bindingResult);
             return "login/signInForm";
         }
+
+        form.setPassword(passwordEncoder.encode(form.getPassword()));
 
         //중복된 이메일인 경우 에러 처리
         try {

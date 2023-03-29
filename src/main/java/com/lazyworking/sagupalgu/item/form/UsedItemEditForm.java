@@ -1,6 +1,7 @@
 package com.lazyworking.sagupalgu.item.form;
 
 import com.lazyworking.sagupalgu.category.domain.Category;
+import com.lazyworking.sagupalgu.user.domain.User;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -30,4 +31,7 @@ public class UsedItemEditForm {
 
     @NotNull
     private Category category;
+
+    @NotNull
+    private User seller;
 }

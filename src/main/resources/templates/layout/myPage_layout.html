@@ -11,23 +11,20 @@
         <div class="row align-items-start" style="padding-top:50px">
             <nav class="col-md-2 d-none d-md-block bg-light sidebar">
                 <div class="py-1 text-center">
-                    <h3 th:text="#{page.adminPage}"></h3>
+                    <h3 th:text="#{page.myPage}"></h3>
                 </div>
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <div style="padding-top:10px;" class="nav flex-column nav-pills" aria-orientation="vertical">
-                                <a th:href="@{/admin/users}" style="margin:5px;text-align: center" class="nav-link text-primary" th:text="#{page.usermanage}"></a>
-                                <a th:href="@{/admin/users/reportedUsers}" style="margin:5px;text-align: center" class="nav-link text-primary" th:text="#{page.reportedUsers}" ></a>
-                                <a th:href="@{/admin/users/blockedUsers}" style="margin:5px;text-align: center" class="nav-link text-primary" th:text="#{page.blockedUsers}"></a>
-                                <a th:href="@{/admin/resources}" style="margin:5px;text-align: center" class="nav-link text-primary" th:text="#{page.resourcemanage}"></a>
-                                <a th:href="@{/admin/roles}" style="margin:5px;text-align: center" class="nav-link text-primary" th:text="#{page.rolemanage}"></a>
+                                <a th:href="@{/users/myPage/userInfo}" style="margin:5px;text-align: center" class="nav-link text-primary" th:text="#{page.user}"></a>
+                                <a th:href="@{/users/myPage/usedItems}" style="margin:5px;text-align: center" class="nav-link text-primary" th:text="#{page.usedItems}"></a>
                             </div>
                         </li>
                     </ul>
                 </div>
             </nav>
-            <div id="content-wrap" style="padding-top:50px;margin-bottom:50px"  class="col">
+            <div id="content-wrap" style="padding-top:50px;margin-bottom:50px" class="col">
                 <!-- content -->
                 <th:block layout:fragment="content"></th:block>
             </div>

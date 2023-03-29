@@ -34,10 +34,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @OneToMany
-    private List<UsedItem> usedItems;
+    private Boolean locked;
 
-    @OneToMany(mappedBy="user",fetch = FetchType.LAZY, cascade={CascadeType.ALL})
+    @OneToMany(mappedBy="seller",fetch = FetchType.LAZY, cascade={CascadeType.ALL}, orphanRemoval = true)
+    private List<UsedItem> usedItems=new ArrayList<>();
+
+    @OneToMany(mappedBy="user")
     private List<RoleUser> roleUsers=new ArrayList<>();
 
     public User (String name, String email, String password, LocalDateTime joinDate, Gender gender) {
@@ -46,6 +48,7 @@ public class User {
         this.password = password;
         this.joinDate = joinDate;
         this.gender = gender;
+        this.locked = false;
     }
 
     //각종 변경 로직
@@ -63,6 +66,13 @@ public class User {
         this.email = email;
         this.password = password;
         this.gender = gender;
+    }
+
+    public void freeUser() {
+        this.locked = false;
+    }
+    public void blockUser() {
+        this.locked = true;
     }
 
 

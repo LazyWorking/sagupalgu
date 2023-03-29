@@ -1,5 +1,6 @@
 package com.lazyworking.sagupalgu.admin.controller;
 
+import com.lazyworking.sagupalgu.global.security.service.AuthenticationUtils;
 import com.lazyworking.sagupalgu.global.security.service.SecurityResourceService;
 import com.lazyworking.sagupalgu.admin.domain.Resource;
 import com.lazyworking.sagupalgu.admin.domain.Role;
@@ -8,6 +9,7 @@ import com.lazyworking.sagupalgu.admin.form.ResourceForm;
 import com.lazyworking.sagupalgu.admin.service.ResourceService;
 import com.lazyworking.sagupalgu.admin.service.RoleHierarchyService;
 import com.lazyworking.sagupalgu.admin.service.RoleService;
+import com.lazyworking.sagupalgu.item.form.UsedItemEditForm;
 import com.lazyworking.sagupalgu.user.domain.*;
 import com.lazyworking.sagupalgu.admin.form.UserAllDataForm;
 import com.lazyworking.sagupalgu.admin.form.UserManageForm;
@@ -104,7 +106,7 @@ public class AdminUsersController {
     }
 
     //신고된 회원 목록
-    @GetMapping("/reportedUsers")
+    @GetMapping("/users/reportedUsers")
     public String getReportedUserList(Model model){
         List<ReportedUserDTO> reportedUsers=reportedUsersService.getReportedUsers();
         model.addAttribute("reportedUsers", reportedUsers);
@@ -112,7 +114,7 @@ public class AdminUsersController {
     }
 
     //신고된 유저의 상세 항목
-    @GetMapping("/reportedUser/{userId}")
+    @GetMapping("/users/reportedUser/{userId}")
     public String getReportedUserInfo(@PathVariable Long userId, Model model) {
         List<ReportedUsers> reportedUsers = reportedUsersService.getTargetUser(userId);
         model.addAttribute("userId", userId);
@@ -122,23 +124,40 @@ public class AdminUsersController {
         return "admin/usercontrol/reportedUser";
     }
 
+    //회원 삭제 창을 띄운다.
+    @GetMapping("/users/{userId}/delete")
+    public String deleteUsedItem(@PathVariable Long userId,Model model) {
+        UserAllDataForm user = userService.findUserAllDataForm(userId);
+        model.addAttribute("user", user);
+        log.info("deletedUser:{}", user);
+        return "/admin/usercontrol/deleteUserForm";
+    }
+
+    //회원 삭제 로직
+    @PostMapping("/users/{userId}/delete")
+    public String deleteUsedItem(@ModelAttribute("user") UserManageForm form, BindingResult bindingResult) {
+        userService.deleteUser(form.getId());
+        return "redirect:/admin/users";
+    }
+
     //차단된 회원 목록
-    @GetMapping("/blockedUsers")
+    @GetMapping("/users/blockedUsers")
     public String getBlockedUsersList(Model model){
         List<BlockedUsers> blockedUsers = blockedUsersService.getBlockedUsers();
         model.addAttribute("blockedUsers", blockedUsers);
         return "admin/usercontrol/blockedUsers";
     }
 
-    @PostMapping("/blockUser/{userId}")
+    //유저 차단하기
+    @PostMapping("/users/blockUser/{userId}")
     public String blockUser(@PathVariable long userId) {
         blockedUsersService.blockUser(userId);
-        return "redirect:/admin/usercontrol/blockedUsers";
+        return "redirect:/admin/users/blockedUsers";
     }
 
-    @PostMapping("/freeUser/{blockedUserId}")
-    public String freeUser(@PathVariable Long blockedUserId) {
-        blockedUsersService.freeUser(blockedUserId);
-        return "redirect:/admin/usercontrol/blockedUsers";
+    @PostMapping("/users/freeUser/{userId}")
+    public String freeUser(@PathVariable Long userId) {
+        blockedUsersService.freeUser(userId);
+        return "redirect:/admin/users/blockedUsers";
     }
 }

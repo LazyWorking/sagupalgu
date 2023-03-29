@@ -20,22 +20,7 @@ import java.util.NoSuchElementException;
 @Transactional
 public class CategoryService {
 
-
-
     private final CategoryRepository categoryRepository;
-    @PostConstruct
-    void createSampleDatas(){
-        Category category1=new Category();
-        category1.setName("category1");
-        Category category2=new Category();
-        category2.setName("category2");
-        Category category3=new Category();
-        category3.setName("category3");
-
-        categoryRepository.save(category1);
-        categoryRepository.save(category2);
-        categoryRepository.save(category3);
-    }
 
     public Category save(Category category) {
         return categoryRepository.save(category);

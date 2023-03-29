@@ -4,33 +4,28 @@
       layout:decorate="~{layout/adminPage_layout}">
 <th:block layout:fragment="content">
     <div class="container">
-        <div class="py-3 text-center">
-            <h2 th:text="#{page.user}">회원 상세</h2>
+
+        <div class="py-5 text-center">
+            <h2 th:text="#{page.deleteUser}">회원 삭제</h2>
         </div>
 
         <form action="user.html" th:action th:object="${user}" method="post">
             <div th:if="${#fields.hasGlobalErrors()}">
                 <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
-
             </div>
             <div>
                 <label for="id" th:text="#{label.user.id}">회원 ID</label>
                 <input type="text" id="id" th:field="*{id}" class="form-control" readonly>
-
             </div>
 
             <div>
                 <label for="email" th:text="#{label.user.email}">이메일</label>
-                <input type="text" id="email" th:field="*{email}" th:errorclass="field-error" class="form-control">
-                <div class="field-error" th:errors="*{email}">
-                </div>
+                <input type="text" id="email" th:field="*{email}" class="form-control" readonly>
             </div>
 
             <div>
                 <label for="name" th:text="#{label.user.name}">회원명</label>
-                <input type="text" id="name" th:field="*{name}" th:errorclass="field-error" class="form-control" placeholder="회원명을 입력하세요">
-                <div class="field-error" th:errors="*{name}">
-                </div>
+                <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="회원명을 입력하세요" readonly>
             </div>
             <div>
                 <label for="password" th:text="#{label.user.password}">비밀번호</label>
@@ -41,14 +36,11 @@
 
             <div>
                 <label for="gender" th:text="#{label.user.gender}">성별</label>
-                <select id="gender" th:field="*{gender}" class="form-control">
+                <select id="gender" th:field="*{gender}" class="form-control" disabled>
                     <option value="">==성별 선택==</option>
                     <option th:each="gender : ${genders}" th:value="${gender.getCode()}"
                             th:text="${gender.getValue()}">성별</option>
                 </select>
-                <div class="field-error" th:errors="*{gender}">
-                    회원 성별  오류
-                </div>
             </div>
 
             <div>
@@ -60,30 +52,29 @@
                 <label for="roles" th:text="#{label.user.roles}"></label>
                 <div id="roles" th:each="role : ${roles}" class="form-check">
                     <input type="checkbox" th:field="*{roles}" th:value="${role.id}"
-                           class="form-check-input">
+                           class="form-check-input" disabled>
                     <label th:for="${#ids.next('roles')}"
                            th:text="${role.roleName}" class="form-check-label">서울</label>
                 </div>
-                <div class="field-error" th:errors="*{roles}">
-                    회원 권한 오류
-                </div>
             </div>
+
+
             <hr class="my-4">
 
             <div class="row">
                 <div class="col">
-                    <button class="w-100 btn btn-primary btn-lg" type="submit" th:text="#{button.save}">저장</button>
+                    <button class="w-100 btn btn-danger btn-lg" type="submit" th:text="#{button.delete}">삭제</button>
                 </div>
                 <div class="col">
                     <button class="w-100 btn btn-secondary btn-lg"
                             onclick="location.href='user.html'"
-                            th:onclick="|location.href='@{/admin/users}'|"
+                            th:onclick="|location.href='@{/admin/users/{userId}(userId=${user.id})}'|"
                             type="button" th:text="#{button.cancel}">취소</button>
                 </div>
             </div>
 
         </form>
 
-    </div>
+    </div> <!-- /container -->
 </th:block>
 </html>

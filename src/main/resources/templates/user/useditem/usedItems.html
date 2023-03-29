@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/default_layout}">
+      layout:decorate="~{layout/myPage_layout}">
 <th:block layout:fragment="content">
     <div class="container" style="max-width: 600px">
         <div class="py-5 text-center">
@@ -27,7 +27,6 @@
                     <th th:text="#{label.usedItem.price}">가격</th>
                     <th th:text="#{label.usedItem.category}">분류</th>
                     <th th:text="#{label.usedItem.ifSelled}">판매여부</th>
-                    <th th:text="#{label.usedItem.seller}">판매자</th>
                     <th th:text="#{label.usedItem.context}">소개</th>
                 </tr>
                 </thead>
@@ -38,7 +37,6 @@
                     <td th:text="${usedItem.price}">10000</td>
                     <td th:text="${usedItem.category.name}">category</td>
                     <td th:text="${usedItem.ifSelled}">on sale</td>
-                    <td th:text="${usedItem.seller.email}">판매자</td>
                     <td th:text="${usedItem.context}">intro</td>
                 </tr>
                 </tbody>

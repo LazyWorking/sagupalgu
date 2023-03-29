@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/default_layout}">
+      layout:decorate="~{layout/myPage_layout}">
 <th:block layout:fragment="content">
     <div class="container">
 
@@ -34,7 +34,7 @@
             </div>
             <div>
                 <label for="category" th:text="#{label.usedItem.category}">분류</label>
-                <select th:field="*{category}" id="category" class="form-select">
+                <select th:field="*{category}" id="category" class="form-control">
                     <option value="">==분류 선택==</option>
                     <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">category</option>
                 </select>
@@ -44,10 +44,14 @@
             </div>
             <div>
                 <label for="ifSelled" class="form-check-label" th:text="#{label.usedItem.ifSelled}">판매 여부</label>
-                <input type="checkbox" id="ifSelled" th:field="${usedItem.ifSelled}" class="form-check-input">
+                <input type="checkbox" style="margin-left:5px;" id="ifSelled" th:field="${usedItem.ifSelled}" class="form-check-input">
                 <div class="field-error" th:errors="*{ifSelled}">
                     상품 소개 오류
                 </div>
+            </div>
+            <div>
+                <label for="seller" th:text="#{label.usedItem.seller}">판매자</label>
+                <input type="text" id="seller" th:field="*{seller.email}" class="form-control" value="user" readonly>
             </div>
             <div>
                 <label for="context" th:text="#{label.usedItem.context}">소개</label>
@@ -71,7 +75,7 @@
                 <div class="col">
                     <button class="w-100 btn btn-secondary btn-lg"
                             onclick="location.href='usedItem.html'"
-                            th:onclick="|location.href='@{/usedItems/{usedItemId}(usedItemId=${usedItem.id})}'|"
+                            th:onclick="|location.href='@{/usedItems{usedItemId}(usedItemId=${usedItem.id})}'|"
                             type="button" th:text="#{button.cancel}">취소</button>
                 </div>
             </div>

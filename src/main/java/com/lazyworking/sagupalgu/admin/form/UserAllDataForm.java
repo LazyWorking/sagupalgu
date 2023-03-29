@@ -29,15 +29,18 @@ public class UserAllDataForm {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    private Boolean locked;
+
     private List<Role> roles;
 
-    public UserAllDataForm(Long id,LocalDateTime joinDate ,String name, String email, String password, Gender gender, List<Role> roles) {
+    public UserAllDataForm(Long id,LocalDateTime joinDate ,String name, String email, String password, Gender gender,Boolean locked, List<Role> roles) {
         this.id = id;
         this.joinDate = joinDate;
         this.name = name;
         this.email = email;
         this.password = password;
         this.gender = gender;
+        this.locked = locked;
         this.roles = roles;
     }
 }

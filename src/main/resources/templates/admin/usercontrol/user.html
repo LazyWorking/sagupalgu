@@ -31,6 +31,11 @@
         </div>
 
         <div>
+            <label for="locked" class="form-check-label" th:text="#{label.user.locked}">차단 여부</label>
+            <input type="checkbox" id="locked" style="margin-left:5px" value="false" th:field="${user.locked}" class="form-check-input" disabled>
+        </div>
+
+        <div>
             <label for="roles" th:text="#{label.user.roles}"></label>
             <div id="roles" th:each="role : ${roles}" class="form-check" >
                 <input type="checkbox" th:field="*{user.roles}" th:value="${role.id}"
@@ -48,6 +53,20 @@
                         onclick="location.href='editForm.html'"
                         th:onclick="|location.href='@{/admin/users/{userId}/edit(userId=${user.id})}'|"
                         type="button" th:text="#{page.editUser}">회원 수정</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-danger btn-lg"
+                        onclick="location.href='userDeleteForm.html'" th:onclick="|location.href='@{/admin/users/{userId}/delete(userId=${user.id})}'|" type="button" th:text="#{button.delete}">회원 삭제</button>
+            </div>
+            <div class="col">
+                <form action="reportedUser.html" th:action="@{|/admin/users/blockUser/${userId}|}" method="post" th:if="not ${user.locked}">
+                    <button class="w-100 btn btn-danger btn-lg" type="submit" th:text="#{button.block}">차단하기</button>
+                </form>
+                <form action="blockedUsers.html" th:action="@{|/admin/users/freeUser/${userId}|}" method="post" th:if="${user.locked}">
+                    <div class="col">
+                        <button class="w-100 btn btn-success" type="submit" th:text="#{button.free}">차단 해제 하기</button>
+                    </div>
+                </form>
             </div>
             <div class="col">
                 <button class="w-100 btn btn-secondary btn-lg"

@@ -2,12 +2,16 @@ package com.lazyworking.sagupalgu.item.controller;
 
 import com.lazyworking.sagupalgu.category.domain.Category;
 import com.lazyworking.sagupalgu.category.service.CategoryService;
+import com.lazyworking.sagupalgu.global.security.service.AuthenticationUtils;
 import com.lazyworking.sagupalgu.item.domain.UsedItem;
 import com.lazyworking.sagupalgu.item.form.UsedItemEditForm;
 import com.lazyworking.sagupalgu.item.form.UsedItemSaveForm;
 import com.lazyworking.sagupalgu.item.service.UsedItemService;
+import com.lazyworking.sagupalgu.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -52,7 +56,13 @@ public class UsedItemController {
         log.info("usedItem: {}", usedItem);
         model.addAttribute("usedItem", usedItem);
         model.addAttribute("category", usedItem.getCategory());
-        return "useditem/usedItem";
+        User user = AuthenticationUtils.getUserFromSecurityContext();
+        log.info("usedItem: {},user: {} , equality: {}", usedItem, user,usedItem.getSeller().equals(user));
+        //해당 상품을 등록한 사용자인경우 상품 관리창으로 이동
+        if(usedItem.getSeller().getEmail().equals(user.getEmail()))
+            return "useditem/usedItemSellerForm";
+        else
+            return "useditem/usedItemCustomerForm";
     }
 
     //아이템 등록 창을 넘겨준다.
@@ -73,25 +83,25 @@ public class UsedItemController {
             return "useditem/addForm";
         }
 
-        UsedItem usedItem = new UsedItem();
-        usedItem.setName(form.getName());
-        usedItem.setPrice(form.getPrice());
-        usedItem.setContext(form.getContext());
-        usedItem.setCategory(form.getCategory());
-
         log.info("category:{}", form.getCategory());
-        UsedItem savedId = usedItemService.save(usedItem);
+        Long savedId = usedItemService.save(form,AuthenticationUtils.getUserFromSecurityContext());
         log.info("savedID: {}", savedId);
-        redirectAttributes.addAttribute("usedItemId", savedId.getId());
+        redirectAttributes.addAttribute("usedItemId", savedId);
 
         return "redirect:/usedItems/{usedItemId}";
     }
 
     //기존에 등록된 상품에 대한 수정을 담당하는 로직
     @GetMapping("/{usedItemId}/edit")
-    public String editForm(@PathVariable Long usedItemId, Model model) {
+    public String editForm(@PathVariable Long usedItemId, Model model,RedirectAttributes redirectAttributes) {
         //기존에 등록한 아이템을 찾아서 해당 정보를 수정 화면에 보여준다.
-        UsedItem searchItem = usedItemService.findById(usedItemId);
+        UsedItem searchItem = usedItemService.findByIdWithUser(usedItemId);
+        User user = AuthenticationUtils.getUserFromSecurityContext();
+
+        //해당 상품의 등록자가 아닌 경우 인가 금지 처리
+        if(!searchItem.getSeller().getEmail().equals(user.getEmail()))
+            return "redirect:/denied?exception=Access Denied";
+
 
         //thymeleaf 기반의 th.object 활용을 위해 빈 객체를 생성해서 넘긴다.
         model.addAttribute("usedItem", searchItem);
@@ -106,16 +116,15 @@ public class UsedItemController {
             log.info("errors={}", bindingResult);
             return "useditem/editForm";
         }
+        User user = AuthenticationUtils.getUserFromSecurityContext();
 
-        UsedItem savedItem = usedItemService.findById(form.getId());
-        savedItem.setName(form.getName());
-        savedItem.setPrice(form.getPrice());
-        savedItem.setContext(form.getContext());
-        savedItem.setIfSelled(form.isIfSelled());
-        savedItem.setCategory(form.getCategory());
+        log.info("usedItem: {},user: {} , equality: {}",user,form.getSeller(),user.equals(form.getSeller()));
+        //해당 상품의 등록자가 아닌 경우 인가 금지 처리
+        if(!form.getSeller().getEmail().equals(user.getEmail()))
+            return "redirect:/denied?exception=Access Denied";
 
-        UsedItem savedId = usedItemService.save(savedItem);
-        redirectAttributes.addAttribute("usedItemId", savedId.getId());
+        Long editedId = usedItemService.edit(form);
+        redirectAttributes.addAttribute("usedItemId", editedId);
 
         return "redirect:/usedItems/{usedItemId}";
     }
@@ -124,6 +133,12 @@ public class UsedItemController {
     @GetMapping("/{usedItemId}/delete")
     public String deleteUsedItem(@PathVariable Long usedItemId, Model model) {
         UsedItem usedItem = usedItemService.findById(usedItemId);
+        User user = AuthenticationUtils.getUserFromSecurityContext();
+
+        //해당 상품의 등록자가 아닌 경우 인가 금지 처리
+        if(!usedItem.getSeller().getEmail().equals(user.getEmail()))
+            return "redirect:/denied?exception=Access Denied";
+
         model.addAttribute("usedItem", usedItem);
         log.info("deletedItem:{}", usedItem);
         return "useditem/deleteForm";
@@ -131,7 +146,13 @@ public class UsedItemController {
 
     @PostMapping("/{usedItemId}/delete")
     public String deleteUsedItem(@PathVariable Long usedItemId, @ModelAttribute("usedItem") UsedItemEditForm form,BindingResult bindingResult) {
+        User user = AuthenticationUtils.getUserFromSecurityContext();
+
+        //해당 상품의 등록자가 아닌 경우 인가 금지 처리
+        if(!form.getSeller().getEmail().equals(user.getEmail()))
+            return "redirect:/denied?exception=Access Denied";
         usedItemService.deleteById(form.getId());
         return "redirect:/usedItems";
     }
+
 }

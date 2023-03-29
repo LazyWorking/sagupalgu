@@ -2,6 +2,7 @@ package com.lazyworking.sagupalgu.user.service;
 
 import com.lazyworking.sagupalgu.admin.form.UserAllDataForm;
 import com.lazyworking.sagupalgu.admin.form.UserManageForm;
+import com.lazyworking.sagupalgu.global.security.service.AccountContext;
 import com.lazyworking.sagupalgu.login.form.SignInForm;
 import com.lazyworking.sagupalgu.admin.domain.Role;
 import com.lazyworking.sagupalgu.admin.domain.RoleUser;
@@ -13,6 +14,11 @@ import com.lazyworking.sagupalgu.user.form.*;
 import com.lazyworking.sagupalgu.user.repository.ReportedUsersRepository;
 import com.lazyworking.sagupalgu.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,12 +37,10 @@ public class UserService {
     private final RoleRepository roleRepository;
 
     private final RoleUserRepository roleUserRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Long addUser(SignInForm form){
         User newUser = form.toEntity();
-        newUser.setPassword(passwordEncoder.encode(form.getPassword()));
         checkDuplicateEmail(form.getEmail());
         newUser = userRepository.save(newUser);
 
@@ -89,7 +93,7 @@ public class UserService {
     @Transactional
     public Long changePassword(UserPasswordForm form) {
         User user = userRepository.findById(form.getId()).orElseThrow(()-> new NoSuchElementException());
-        user.changePassword(passwordEncoder.encode(form.getPassword()));
+        user.changePassword(form.getPassword());
         return user.getId();
     }
     //회원 목록 조회
@@ -105,14 +109,14 @@ public class UserService {
     public UserManageForm findUserManageForm(Long id){
         User user = findUser(id);
         List<Role> roles = user.getRoleUsers().stream().map((roleUser) -> roleUser.getRole()).collect(Collectors.toList());
-        UserManageForm userManageForm = new UserManageForm(user.getId(),user.getName(),user.getEmail(),user.getPassword(),user.getGender(),roles);
+        UserManageForm userManageForm = new UserManageForm(user.getId(),user.getName(),user.getEmail(),user.getPassword(),user.getGender(),user.getLocked(),roles);
         return userManageForm;
     }
     //모든 정보가 포함된 유저의 상세 정보
     public UserAllDataForm findUserAllDataForm(Long id) {
         User user = findUser(id);
         List<Role> roles = user.getRoleUsers().stream().map((roleUser) -> roleUser.getRole()).collect(Collectors.toList());
-        UserAllDataForm userAllDataForm = new UserAllDataForm(user.getId(),user.getJoinDate(),user.getName(),user.getEmail(),user.getPassword(),user.getGender(),roles);
+        UserAllDataForm userAllDataForm = new UserAllDataForm(user.getId(),user.getJoinDate(),user.getName(),user.getEmail(),user.getPassword(),user.getGender(),user.getLocked(),roles);
         return userAllDataForm;
     }
 
@@ -120,6 +124,11 @@ public class UserService {
     //회원 삭제
     @Transactional
     public void deleteUser(long id) {
+        User user = userRepository.findById(id).get();
+        for (RoleUser roleUser : user.getRoleUsers()) {
+            roleUserRepository.delete(roleUser);
+        }
+        user.getRoleUsers().clear();
         userRepository.deleteById(id);
     }
 
@@ -137,5 +146,8 @@ public class UserService {
         return reportedUsers.getId();
     }
 
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 
 }
