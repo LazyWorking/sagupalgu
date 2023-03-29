@@ -1,5 +1,6 @@
 package com.lazyworking.sagupalgu.global.security.handler;
 
+import com.lazyworking.sagupalgu.user.exception.UserLockedException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,6 +21,8 @@ public class FormAuthenticationFailureHandler extends SimpleUrlAuthenticationFai
             errorMessage = "Invalid Username or Password";
         } else if (exception instanceof InsufficientAuthenticationException) {
             errorMessage = " Invalid Secret Key";
+        } else if (exception instanceof UserLockedException) {
+            errorMessage = "Locked User, Contact to administrator";
         }
         setDefaultFailureUrl("/login?error=true&exception=" + errorMessage);
         super.onAuthenticationFailure(request, response, exception);

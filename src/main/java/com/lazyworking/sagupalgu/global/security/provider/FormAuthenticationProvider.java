@@ -2,6 +2,8 @@ package com.lazyworking.sagupalgu.global.security.provider;
 
 import com.lazyworking.sagupalgu.global.security.service.AccountContext;
 import com.lazyworking.sagupalgu.global.security.webdetails.FormWebAuthenticationDetails;
+import com.lazyworking.sagupalgu.user.exception.UserLockedException;
+import com.lazyworking.sagupalgu.user.service.BlockedUsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -31,6 +33,9 @@ public class FormAuthenticationProvider implements AuthenticationProvider {
         log.info("user: {}", userDetails);
         if(userDetails == null|| !passwordEncoder.matches(passWord,userDetails.getPassword())){
             throw new BadCredentialsException("BadCredentialException");
+        }
+        if (userDetails.getUser().getLocked()) {
+            throw new UserLockedException("Blocked User");
         }
 
         FormWebAuthenticationDetails details = (FormWebAuthenticationDetails)authentication.getDetails();
