@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<link href="../css/default_layout_style.css" rel="stylesheet">
+<link href="/css/default_layout_style.css" rel="stylesheet">
 <body>
     <div id="wrap">
         <!-- header -->
@@ -17,11 +17,11 @@
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <div style="padding-top:10px;" class="nav flex-column nav-pills" aria-orientation="vertical">
-                                <a th:href="@{/admin/users}" style="margin:5px;" class="nav-link text-primary" th:text="#{page.usermanage}"></a>
-                                <a th:href="@{/admin/resources}" style="margin:5px;" class="nav-link text-primary" th:text="#{page.resourcemanage}"></a>
-                                <a th:href="@{/admin/roles}" style="margin:5px;" class="nav-link text-primary" th:text="#{page.rolemanage}"></a>
-                                <a th:href="@{/admin/reportedUsers}" style="margin:5px;" class="nav-link text-primary" th:text="#{page.reportedUser}" ></a>
-                                <a th:href="@{/admin/blockedUsers}" style="margin:5px;" class="nav-link text-primary" th:text="#{page.blockedUsers}"></a>
+                                <a th:href="@{/admin/users}" style="margin:5px;text-align: center" class="nav-link text-primary" th:text="#{page.usermanage}"></a>
+                                <a th:href="@{/admin/users/reportedUsers}" style="margin:5px;text-align: center" class="nav-link text-primary" th:text="#{page.reportedUsers}" ></a>
+                                <a th:href="@{/admin/users/blockedUsers}" style="margin:5px;text-align: center" class="nav-link text-primary" th:text="#{page.blockedUsers}"></a>
+                                <a th:href="@{/admin/resources}" style="margin:5px;text-align: center" class="nav-link text-primary" th:text="#{page.resourcemanage}"></a>
+                                <a th:href="@{/admin/roles}" style="margin:5px;text-align: center" class="nav-link text-primary" th:text="#{page.rolemanage}"></a>
                             </div>
                         </li>
                     </ul>

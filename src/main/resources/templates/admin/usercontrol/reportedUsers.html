@@ -19,7 +19,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="reportedUser : ${reportedUsers}">
-                    <td><a href="reportedUser.html" th:href="@{|/admin/reportedUser/${reportedUser.user.id}|}" th:text="${reportedUser.user.id}">유저 ID</a></td>
+                    <td><a href="reportedUser.html" th:href="@{|/admin/users/reportedUser/${reportedUser.user.id}|}" th:text="${reportedUser.user.id}">유저 ID</a></td>
                     <td th:text="${reportedUser.count}">2</td>
                 </tr>
                 </tbody>

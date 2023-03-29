@@ -9,7 +9,7 @@
             <h2 th:text="#{page.report}">유저 신고</h2>
         </div>
 
-        <form action="reportForm.html" th:action th:object="${reportUser}" method="post">
+        <form action="reportForm.html" th:action th:object="${form}" method="post">
             <div th:if="${#fields.hasGlobalErrors()}">
                 <p class="field-error" th:each=" err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메세지</p>
             </div>

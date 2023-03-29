@@ -19,10 +19,10 @@
                 </thead>
                 <tbody>
                 <tr th:each="blockUser : ${blockedUsers}">
-                    <td><a href="userInfo.html" th:href="@{|/users/${blockUser.id}|}" th:text="${blockUser.id}">유저 ID</a></td>
+                    <td><a href="userInfo.html" th:href="@{|/admin/users/${blockUser.id}|}" th:text="${blockUser.id}">유저 ID</a></td>
                     <td th:text="${blockUser.date} ">날짜</td>
                     <td>
-                        <form action="blockedUsers.html" th:action="@{|/admin/freeUser/${blockUser.id}|}" method="post">
+                        <form action="blockedUsers.html" th:action="@{|/admin/users/freeUser/${blockUser.id}|}" method="post">
                             <div class="col">
                                 <button class="w-100 btn btn-success" type="submit" th:text="#{button.free}">차단 해제 하기</button>
                             </div>
