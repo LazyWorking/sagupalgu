@@ -35,10 +35,7 @@
             <div>
                 <label for="password" th:text="#{label.user.password}">비밀번호</label>
                 <div style="display:flex">
-                    <input type="password" id="password" th:field="*{password}" th:errorclass="field-error" class="form-control" readonly>
-                    <div class="field-error" th:errors="*{password}">
-                        회원 비밀번호 오류
-                    </div>
+                    <input type="password" id="password" th:field="*{password}" class="form-control" readonly>
                 </div>
             </div>
 
@@ -52,6 +49,11 @@
                 <div class="field-error" th:errors="*{gender}">
                     회원 성별  오류
                 </div>
+            </div>
+
+            <div>
+                <label for="locked" class="form-check-label" th:text="#{label.user.locked}">차단 여부</label>
+                <input type="checkbox" id="locked" style="margin-left:5px" value="false" th:field="*{locked}" class="form-check-input" disabled>
             </div>
 
             <div>
@@ -71,10 +73,6 @@
             <div class="row">
                 <div class="col">
                     <button class="w-100 btn btn-primary btn-lg" type="submit" th:text="#{button.save}">저장</button>
-                </div>
-                <div class="col">
-                    <button class="w-100 btn btn-danger btn-lg"
-                            onclick="location.href='userDeleteForm.html'" th:onclick="|location.href='@{/admin/users/{userId}/delete(userId=${user.id})}'|" type="button" th:text="#{button.delete}">회원 삭제</button>
                 </div>
                 <div class="col">
                     <button class="w-100 btn btn-secondary btn-lg"
