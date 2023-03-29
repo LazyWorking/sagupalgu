@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<link href="/css/default_layout_style.css" rel="stylesheet">
+<body>
+    <div id="wrap">
+        <!-- header -->
+        <th:block th:replace="/layout/fragments/header :: header"></th:block>
+        <!-- navbar -->
+        <th:block th:replace="/layout/fragments/navbar :: navbar"></th:block>
+        <div class="row align-items-start" style="padding-top:50px">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="py-1 text-center">
+                    <h3 th:text="#{page.myPage}"></h3>
+                </div>
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <div style="padding-top:10px;" class="nav flex-column nav-pills" aria-orientation="vertical">
+                                <a th:href="@{/users/myPage/userInfo}" style="margin:5px;text-align: center" class="nav-link text-primary" th:text="#{page.user}"></a>
+                                <a th:href="@{/users/myPage/usedItems}" style="margin:5px;text-align: center" class="nav-link text-primary" th:text="#{page.usedItems}"></a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div id="content-wrap" style="padding-top:50px;margin-bottom:50px" class="col">
+                <!-- content -->
+                <th:block layout:fragment="content"></th:block>
+            </div>
+        </div>
+    </div>
+    <!-- footer -->
+    <th:block th:replace="/layout/fragments/footer :: footer"></th:block>
+
+</body>
+</html>

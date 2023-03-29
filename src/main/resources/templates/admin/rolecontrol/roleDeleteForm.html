@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/adminPage_layout}">
+<th:block layout:fragment="content">
+    <div class="container">
+
+        <div class="py-3 text-center">
+            <h2 th:text="#{page.deleteRole}">권한 삭제</h2>
+        </div>
+        <form th:action th:object="${role}" method="post">
+            <div>
+                <label for="id" th:text="#{label.role.id}">권한 ID</label>
+                <input type="text" id="id" class="form-control" th:value="*{id}" readonly>
+            </div>
+            <div>
+                <label for="roleName" th:text="#{label.role.name}">권한 이름</label>
+                <input type="text" id="roleName" th:field="*{roleName}" class="form-control" th:errorclass="field-error" placeholder="권한의 이름을 입력하세요" readonly>
+            </div>
+            <div>
+                <label for="roleDesc" th:text="#{label.role.desc}">권한 설명</label>
+                <input type="text" id="roleDesc" th:field="*{roleDesc}" class="form-control" th:errorclass="field-error" placeholder="권한의 부가 설명을 입력하세요" readonly>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row">
+                <div class="col">
+                    <button class="w-100 btn btn-primary btn-lg" type="submit" th:text="#{button.delete}">자원 삭제</button>
+                </div>
+                <div class="col">
+                    <button class="w-100 btn btn-secondary btn-lg"
+                            onclick="location.href='admin/rolecontrol/roles.html'"
+                            th:onclick="|location.href='@{/admin/roles}'|"
+                            type="button" th:text="#{button.list}">목록으로</button>
+                </div>
+            </div>
+        </form>
+
+    </div> <!-- /container -->
+</th:block>
+</html>

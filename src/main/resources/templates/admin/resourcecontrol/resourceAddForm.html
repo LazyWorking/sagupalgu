@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/adminPage_layout}">
+<th:block layout:fragment="content">
+    <div class="container">
+
+        <div class="py-3 text-center">
+            <h2 th:text="#{page.addResource}">자원 등록</h2>
+        </div>
+        <form th:action th:object="${resource}" method="post">
+            <div th:if="${#fields.hasGlobalErrors()}">
+                <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+
+            </div>
+            <div>
+                <label for="orderNum" th:text="#{label.resource.order}">적용 순서</label>
+                <input type="text" id="orderNum" th:field="*{orderNum}" class="form-control" th:errorclass="field-error" placeholder="적용순서를 입력해주세요">
+                <div class="field-error" th:errors="*{orderNum}">
+                    자원 순서 문제
+                </div>
+            </div>
+            <div>
+                <label for="resourceName" th:text="#{label.resource.name}">자원 이름</label>
+                <input type="text" id="resourceName" th:field="*{resourceName}" class="form-control" th:errorclass="field-error" placeholder="자원의 이름을 입력하세요">
+                <div class="field-error" th:errors="*{resourceName}">
+                    자원명 에러
+                </div>
+            </div>
+            <div>
+                <label for="httpMethod" th:text="#{label.resource.http}">Http Method</label>
+                <input type="text" id="httpMethod" th:field="*{httpMethod}" class="form-control" th:errorclass="field-error" placeholder="자원에 적용되는 Http Method을 입력해주세요">
+                <div class="field-error" th:errors="*{httpMethod}">
+                    httpMethod 에러
+                </div>
+            </div>
+            <div>
+                <label for="resourceType" th:text="#{label.resource.type}">자원 종류</label>
+                <input type="text" id="resourceType" th:field="*{resourceType}" class="form-control" th:errorclass="field-error" placeholder="자원의 종류를 입력해주세요">
+                <div class="field-error" th:errors="*{resourceType}">
+                    자워 종류 문제
+                </div>
+            </div>
+
+            <div>
+                <label for="roles" th:text="#{label.resource.roles}"></label>
+                <div id="roles" th:each="role : ${roles}" class="form-check" >
+                    <input type="checkbox" th:field="*{roles}" th:value="${role.id}"
+                           class="form-check-input">
+                    <label th:for="${#ids.next('roles')}"
+                           th:text="${role.roleName}" class="form-check-label">서울</label>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row">
+                <div class="col">
+                    <button class="w-100 btn btn-primary btn-lg" type="submit" th:text="#{button.save}">자원 등록</button>
+                </div>
+                <div class="col">
+                    <button class="w-100 btn btn-danger btn-lg"
+                            onclick="location.href='admin/resourcecontrol/resources.html'"
+                            th:onclick="|location.href='@{/admin/resources/}'|"
+                            type="button" th:text="#{button.cancel}">취소</button>
+                </div>
+
+                <div class="col">
+                    <button class="w-100 btn btn-secondary btn-lg"
+                            onclick="location.href='/admin/resourcecontrol/resources.html'"
+                            th:onclick="|location.href='@{/admin/resources}'|"
+                            type="button" th:text="#{button.list}">목록으로</button>
+                </div>
+
+            </div>
+        </form>
+    </div> <!-- /container -->
+</th:block>
+</html>

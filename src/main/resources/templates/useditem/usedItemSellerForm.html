@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default_layout}">
+<th:block layout:fragment="content">
+    <div class="container">
+
+        <div class="py-5 text-center">
+            <h2 th:text="#{page.usedItem}">상품 상세</h2>
+        </div>
+
+        <div>
+            <label for="id" th:text="#{label.usedItem.id}">상품 ID</label>
+            <input type="text" id="id" name="id" class="form-control" value="1" th:value="${usedItem.id}" readonly>
+        </div>
+        <div>
+            <label for="name" th:text="#{label.usedItem.name}">상품명</label>
+            <input type="text" id="name" name="name" class="form-control" value="상품A" th:value="${usedItem.name}" readonly>
+        </div>
+        <div>
+            <label for="price" th:text="#{label.usedItem.price}">가격</label>
+            <input type="text" id="price" name="price" class="form-control" value="10000" th:value="${usedItem.price}" readonly>
+        </div>
+        <div>
+            <label for="category" th:text="#{label.usedItem.category}">분류</label>
+            <select th:field="*{usedItem.category.id}" id="category" class="form-control" disabled>
+                <option value="">==분류 선택==</option>
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">category</option>
+            </select>
+        </div>
+        <div>
+            <label for="ifSelled" class="form-check-label" th:text="#{label.usedItem.ifSelled}">판매 여부</label>
+            <input type="checkbox" style="margin-left:5px" id="ifSelled" th:field="${usedItem.ifSelled}" class="form-check-input" disabled>
+        </div>
+
+        <div>
+            <label for="seller" th:text="#{label.usedItem.seller}">판매자</label>
+            <input type="text" id="seller" name="seller" class="form-control" value="user" th:value="${usedItem.seller.email}" readonly>
+        </div>
+
+
+        <div>
+            <label for="context" th:text="#{label.usedItem.context}">설명</label>
+            <input type="text" id="context" name="context" class="form-control" value="10" th:value="${usedItem.context}" readonly>
+        </div>
+
+
+
+        <hr class="my-4">
+
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg"
+                        onclick="location.href='editForm.html'"
+                        th:onclick="|location.href='@{/usedItems/{usedItemId}/edit(usedItemId=${usedItem.id})}'|"
+                        type="button" th:text="#{button.edit}">상품 수정</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg"
+                        onclick="location.href='usedItems.html'"
+                        th:onclick="|location.href='@{/users/myPage/usedItems}'|"
+                        type="button" th:text="#{button.list}">목록으로</button>
+            </div>
+        </div>
+
+    </div> <!-- /container -->
+</th:block>
+</html>

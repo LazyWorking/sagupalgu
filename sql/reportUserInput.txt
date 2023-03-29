@@ -1,0 +1,16 @@
+insert into reported_users(ID,DATE, REPORTER_ID, USER_ID,CONTEXT) values (1,CURRENT_TIMESTAMP,1,2,'hi');
+insert into reported_users(ID,DATE, REPORTER_ID, USER_ID,CONTEXT) values (2,CURRENT_TIMESTAMP,1,2,'hi');
+insert into reported_users(ID,DATE, REPORTER_ID, USER_ID,CONTEXT) values (3,CURRENT_TIMESTAMP,1,2,'hi');
+insert into reported_users(ID,DATE, REPORTER_ID, USER_ID,CONTEXT) values (4,CURRENT_TIMESTAMP,1,2,'hi');
+insert into reported_users(ID,DATE, REPORTER_ID, USER_ID,CONTEXT) values (5,CURRENT_TIMESTAMP,1,4,'hi');
+insert into reported_users(ID,DATE, REPORTER_ID, USER_ID,CONTEXT) values (6,CURRENT_TIMESTAMP,1,4,'hi');
+insert into reported_users(ID,DATE, REPORTER_ID, USER_ID,CONTEXT) values (7,CURRENT_TIMESTAMP,2,3,'hi');
+insert into reported_users(ID,DATE, REPORTER_ID, USER_ID,CONTEXT) values (8,CURRENT_TIMESTAMP,2,3,'hi');
+insert into reported_users(ID,DATE, REPORTER_ID, USER_ID,CONTEXT) values (9,CURRENT_TIMESTAMP,2,4,'hi');
+insert into reported_users(ID,DATE, REPORTER_ID, USER_ID,CONTEXT) values (10,CURRENT_TIMESTAMP,2,5,'hi');
+insert into reported_users(ID,DATE, REPORTER_ID, USER_ID,CONTEXT) values (11,CURRENT_TIMESTAMP,3,4,'hi');
+insert into reported_users(ID,DATE, REPORTER_ID, USER_ID,CONTEXT) values (12,CURRENT_TIMESTAMP,3,5,'hi');
+insert into reported_users(ID,DATE, REPORTER_ID, USER_ID,CONTEXT) values (13,CURRENT_TIMESTAMP,4,1,'hi');
+insert into reported_users(ID,DATE, REPORTER_ID, USER_ID,CONTEXT) values (14,CURRENT_TIMESTAMP,4,2,'hi');
+insert into reported_users(ID,DATE, REPORTER_ID, USER_ID,CONTEXT) values (15,CURRENT_TIMESTAMP,4,3,'hi');
+insert into reported_users(ID,DATE, REPORTER_ID, USER_ID,CONTEXT) values (16,CURRENT_TIMESTAMP,4,3,'hi');
