@@ -2,6 +2,7 @@ package com.lazyworking.sagupalgu.item.controller;
 
 import com.lazyworking.sagupalgu.category.domain.Category;
 import com.lazyworking.sagupalgu.category.service.CategoryService;
+import com.lazyworking.sagupalgu.global.security.service.AuthenticationUtils;
 import com.lazyworking.sagupalgu.item.domain.UsedItem;
 import com.lazyworking.sagupalgu.item.form.UsedItemEditForm;
 import com.lazyworking.sagupalgu.item.form.UsedItemSaveForm;
@@ -55,7 +56,7 @@ public class UsedItemController {
         log.info("usedItem: {}", usedItem);
         model.addAttribute("usedItem", usedItem);
         model.addAttribute("category", usedItem.getCategory());
-        User user = getUserFromSecurityContext();
+        User user = AuthenticationUtils.getUserFromSecurityContext();
         log.info("usedItem: {},user: {} , equality: {}", usedItem, user,usedItem.getSeller().equals(user));
         //해당 상품을 등록한 사용자인경우 상품 관리창으로 이동
         if(usedItem.getSeller().getEmail().equals(user.getEmail()))
@@ -83,7 +84,7 @@ public class UsedItemController {
         }
 
         log.info("category:{}", form.getCategory());
-        Long savedId = usedItemService.save(form,getUserFromSecurityContext());
+        Long savedId = usedItemService.save(form,AuthenticationUtils.getUserFromSecurityContext());
         log.info("savedID: {}", savedId);
         redirectAttributes.addAttribute("usedItemId", savedId);
 
@@ -95,7 +96,7 @@ public class UsedItemController {
     public String editForm(@PathVariable Long usedItemId, Model model,RedirectAttributes redirectAttributes) {
         //기존에 등록한 아이템을 찾아서 해당 정보를 수정 화면에 보여준다.
         UsedItem searchItem = usedItemService.findByIdWithUser(usedItemId);
-        User user = getUserFromSecurityContext();
+        User user = AuthenticationUtils.getUserFromSecurityContext();
 
         //해당 상품의 등록자가 아닌 경우 인가 금지 처리
         if(!searchItem.getSeller().getEmail().equals(user.getEmail()))
@@ -115,7 +116,7 @@ public class UsedItemController {
             log.info("errors={}", bindingResult);
             return "useditem/editForm";
         }
-        User user = getUserFromSecurityContext();
+        User user = AuthenticationUtils.getUserFromSecurityContext();
 
         log.info("usedItem: {},user: {} , equality: {}",user,form.getSeller(),user.equals(form.getSeller()));
         //해당 상품의 등록자가 아닌 경우 인가 금지 처리
@@ -132,7 +133,7 @@ public class UsedItemController {
     @GetMapping("/{usedItemId}/delete")
     public String deleteUsedItem(@PathVariable Long usedItemId, Model model) {
         UsedItem usedItem = usedItemService.findById(usedItemId);
-        User user = getUserFromSecurityContext();
+        User user = AuthenticationUtils.getUserFromSecurityContext();
 
         //해당 상품의 등록자가 아닌 경우 인가 금지 처리
         if(!usedItem.getSeller().getEmail().equals(user.getEmail()))
@@ -145,17 +146,13 @@ public class UsedItemController {
 
     @PostMapping("/{usedItemId}/delete")
     public String deleteUsedItem(@PathVariable Long usedItemId, @ModelAttribute("usedItem") UsedItemEditForm form,BindingResult bindingResult) {
-        User user = getUserFromSecurityContext();
+        User user = AuthenticationUtils.getUserFromSecurityContext();
 
         //해당 상품의 등록자가 아닌 경우 인가 금지 처리
         if(!form.getSeller().getEmail().equals(user.getEmail()))
             return "redirect:/denied?exception=Access Denied";
         usedItemService.deleteById(form.getId());
         return "redirect:/usedItems";
-    }
-
-    private User getUserFromSecurityContext() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 }

@@ -1,6 +1,7 @@
 package com.lazyworking.sagupalgu.user.controller;
 
 import com.lazyworking.sagupalgu.global.security.service.AccountContext;
+import com.lazyworking.sagupalgu.global.security.service.AuthenticationUtils;
 import com.lazyworking.sagupalgu.global.security.service.CustomUserDetailsService;
 import com.lazyworking.sagupalgu.item.domain.UsedItem;
 import com.lazyworking.sagupalgu.item.form.UsedItemEditForm;
@@ -62,7 +63,7 @@ public class MyPageController {
     //특정 유저에 대한 조회
     @GetMapping("/userInfo")
     public String usedItem(Model model) {
-        User user = getUserFromSecurityContext();
+        User user = AuthenticationUtils.getUserFromSecurityContext();
         log.info("user: {}", user);
         model.addAttribute("user", user);
         log.info("gender:{},gender:{}, class:{}", user.getGender().getCode(), user.getGender().getValue(), user.getGender().getClass());
@@ -101,7 +102,7 @@ public class MyPageController {
     //회원의 비밀번호 변경창을 띄운다.
     @GetMapping("/userInfo/changePassword")
     public String changePasswordForm(Model model) {
-        User user = getUserFromSecurityContext();
+        User user = AuthenticationUtils.getUserFromSecurityContext();
         UserPasswordForm form = new UserPasswordForm(user.getId());
         model.addAttribute("user", form);
         return "user/userinfo/changePasswordForm";
@@ -125,7 +126,7 @@ public class MyPageController {
     //회원 삭제 창을 띄운다.
     @GetMapping("/userInfo/delete")
     public String deleteUsedItem(Model model) {
-        User user = getUserFromSecurityContext();
+        User user = AuthenticationUtils.getUserFromSecurityContext();
         model.addAttribute("user", user);
         log.info("deletedUser:{}", user);
         return "user/userinfo/deleteUserForm";
@@ -141,7 +142,7 @@ public class MyPageController {
     //회원이 등록한 상품 목록 조회
     @GetMapping("/usedItems")
     public String usedItems(Model model) {
-        User user = getUserFromSecurityContext();
+        User user = AuthenticationUtils.getUserFromSecurityContext();
         List<UsedItem> usedItemList = usedItemService.getUsedItemsBySeller(user);
         log.info("user usedItems:{}", usedItemList);
         model.addAttribute("usedItems", usedItemList);
@@ -154,8 +155,5 @@ public class MyPageController {
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
 
-    private User getUserFromSecurityContext() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
 
 }

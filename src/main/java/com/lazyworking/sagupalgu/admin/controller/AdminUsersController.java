@@ -104,7 +104,7 @@ public class AdminUsersController {
     }
 
     //신고된 회원 목록
-    @GetMapping("/reportedUsers")
+    @GetMapping("/users/reportedUsers")
     public String getReportedUserList(Model model){
         List<ReportedUserDTO> reportedUsers=reportedUsersService.getReportedUsers();
         model.addAttribute("reportedUsers", reportedUsers);
@@ -112,7 +112,7 @@ public class AdminUsersController {
     }
 
     //신고된 유저의 상세 항목
-    @GetMapping("/reportedUser/{userId}")
+    @GetMapping("/users/reportedUser/{userId}")
     public String getReportedUserInfo(@PathVariable Long userId, Model model) {
         List<ReportedUsers> reportedUsers = reportedUsersService.getTargetUser(userId);
         model.addAttribute("userId", userId);
@@ -123,22 +123,22 @@ public class AdminUsersController {
     }
 
     //차단된 회원 목록
-    @GetMapping("/blockedUsers")
+    @GetMapping("/users/blockedUsers")
     public String getBlockedUsersList(Model model){
         List<BlockedUsers> blockedUsers = blockedUsersService.getBlockedUsers();
         model.addAttribute("blockedUsers", blockedUsers);
         return "admin/usercontrol/blockedUsers";
     }
 
-    @PostMapping("/blockUser/{userId}")
+    @PostMapping("/users/blockUser/{userId}")
     public String blockUser(@PathVariable long userId) {
         blockedUsersService.blockUser(userId);
-        return "redirect:/admin/usercontrol/blockedUsers";
+        return "redirect:/admin/users/blockedUsers";
     }
 
-    @PostMapping("/freeUser/{blockedUserId}")
+    @PostMapping("/users/freeUser/{blockedUserId}")
     public String freeUser(@PathVariable Long blockedUserId) {
         blockedUsersService.freeUser(blockedUserId);
-        return "redirect:/admin/usercontrol/blockedUsers";
+        return "redirect:/admin/users/blockedUsers";
     }
 }

@@ -140,4 +140,8 @@ public class UserService {
 
         return reportedUsers.getId();
     }
+
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 }
