@@ -6,11 +6,14 @@ import com.lazyworking.sagupalgu.category.domain.Category;
 import com.lazyworking.sagupalgu.category.repository.CategoryRepository;
 import com.lazyworking.sagupalgu.item.domain.UsedItem;
 import com.lazyworking.sagupalgu.item.repository.UsedItemRepository;
+import com.lazyworking.sagupalgu.user.domain.BlockedUsers;
 import com.lazyworking.sagupalgu.user.domain.Gender;
 import com.lazyworking.sagupalgu.user.domain.User;
+import com.lazyworking.sagupalgu.user.repository.BlockedUsersRepository;
 import com.lazyworking.sagupalgu.user.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Block;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,6 +31,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private static AtomicInteger count = new AtomicInteger(0);
 
     private final UserRepository userRepository;
+    private final BlockedUsersRepository blockedUsersRepository;
     private final RoleRepository roleRepository;
     private final RoleHierarchyRepository roleHierarchyRepository;
     private final RoleUserRepository roleUserRepository;
@@ -57,8 +61,13 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         //초기 유저 생성
         User user= createUser(new User("user","user@email.com",passwordEncoder.encode("1234"), LocalDateTime.now(), Gender.M));
         User user2= createUser(new User("user2","user2@email.com",passwordEncoder.encode("1234"), LocalDateTime.now(), Gender.M));
+        User user3= createUser(new User("user3","user3@email.com",passwordEncoder.encode("1234"), LocalDateTime.now(), Gender.M));
         User manager=createUser(new User("manager","manager@email.com",passwordEncoder.encode("1234"), LocalDateTime.now(),Gender.F));
         User admin=createUser(new User("admin","admin@email.com",passwordEncoder.encode("1234"), LocalDateTime.now(),Gender.F));
+
+        //차단 유저 생성
+        createBlockedUsers(user3);
+
 
         //초기 권한 설정
         Role roleUser = createRole(new Role("ROLE_USER", "유저"));
@@ -67,6 +76,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         //유저 권한 매핑
         createRoleUser(user,roleUser);
+        createRoleUser(user2,roleUser);
+        createRoleUser(user3,roleUser);
         createRoleUser(admin,roleAdmin);
         createRoleUser(manager, roleManager);
 
@@ -98,6 +109,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private User createUser(User user) {
         userRepository.save(user);
         return user;
+    }
+
+    private void createBlockedUsers(User user) {
+        user.blockUser();
+        blockedUsersRepository.save(new BlockedUsers(user));
     }
     private Role createRole(Role role) {
         roleRepository.save(role);
